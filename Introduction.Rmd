@@ -4,8 +4,18 @@ output:
   html_document:
     toc: true
     toc_float: true
+    highlight: tango
+    css: style.css
     theme: cosmo
 ---
+
+```{css}
+.columns {display: flex;}
+h1 {color: red;}
+h2 {color: green;}
+```
+
+
 
 \ \par
 # Motivation

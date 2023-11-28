@@ -1,0 +1,16 @@
+/* Whole document: */
+body{
+  font-family: Times New Roman;
+  font-size: 16pt;
+}
+/* Headers */
+h1,h2,h3,h4,h5,h6{
+  font-family: Comic Sans MS;
+  font-size: 24pt;
+  font-weight: bold;
+}
+/* navbar */
+body{
+  font-family: Georgia;
+  font-size: 12pt;
+}
