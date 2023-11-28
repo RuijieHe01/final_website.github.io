@@ -1,0 +1,36 @@
+---
+title: "Introduction"
+output: 
+  html_document:
+    toc: true
+    toc_float: true
+    theme: cosmo
+---
+
+\ \par
+# Motivation
+
+AIDS, or Acquired Immunodeficiency Syndrome, remains a significant global health challenge, with millions affected by HIV[1]. Effective treatment strategies are crucial for improving the quality of life of patients and prolonging survival[2]. Our analysis seeks to leverage this rich dataset to gain insights into factors influencing survival outcomes in AIDS patients and to evaluate the efficacy of different treatment modalities.
+
+Additionally, we think this project will allow us to combine skills learned in this class with skills from all our other classes, especially Biostatistical Methods, Principles of Epidemiology, and Survival Analysis.
+
+# Main Questions
+
+* What are some factors contributes to the difference of survival outcomes in AIDS patients?
+
+# Background Information
+
+......
+
+# Anticipated Data Sources
+
+The [AIDS Clinical Trials Group Study 175](https://archive.ics.uci.edu/dataset/890/aids+clinical+trials+group+study+175) dataset provides a comprehensive collection of healthcare statistics and categorical information about patients diagnosed with AIDS.
+
+
+# Reference
+
+[1] Whiteside, A. and D. Wilson, Health and AIDS in 2019 and beyond. Afr J AIDS Res, 2018. 17(4): p. iii-v.
+[2] [2] Eisinger, R. W., & Fauci, A. S. (2018). Ending the HIV/AIDS pandemic. Emerging infectious diseases, 24(3), 413. 
+
+
+

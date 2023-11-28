@@ -1,0 +1,30 @@
+---
+title: "My awesome website"
+output: 
+  html_document:
+    toc: true
+    toc_float: true
+    theme: cosmo
+---
+
+# This is our final project
+
+![](images/homepage.jpg)
+
+# Motivation
+
+# Project Directory
+
+* [Introduction](Introduction.html): Personal Information
+
+* [Data](Data.html):
+
+* [Survival analysis](Survival_analysis.html):
+
+* [Modeling](Modeling.html):
+
+* [Shiny]():
+
+* [Report](Project-report.html): 
+
+# Team Member
