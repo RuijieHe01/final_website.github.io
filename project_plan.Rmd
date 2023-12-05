@@ -1,0 +1,39 @@
+---
+title: "Project Overview"
+output: 
+  html_document:
+    toc: true
+    toc_float: true
+    css: style.css
+    theme: cosmo
+---
+
+## Project Title
+
+* Factors influencing survival outcomes in AIDS patients
+
+
+\ \par
+## Motivation
+AIDS, or Acquired Immunodeficiency Syndrome, remains a significant global health challenge, with millions affected by HIV[1]. Effective treatment strategies are crucial for improving the quality of life of patients and prolonging survival[2]. Our analysis seeks to leverage this rich dataset to gain insights into factors influencing survival outcomes in AIDS patients and to evaluate the efficacy of different treatment modalities.
+
+
+\ \par
+## Intended Final Products
+We intend to provide a report including an introduction to the data and the project, visualizations of disease progression over time, and an analysis of survival across treatment methods. Then, we will create a website containing interactive graphics and life-tables.
+
+
+\ \par
+## Methods
+For our final project, we will start with data wrangling. Then, we will create a life table after a brief exploratory analysis using data summaries and visualization. Besides, we will generally use R in the research, and most of the work may be uploaded to Github. There are various methods for handling right-censored and left-truncated survival data with covariates, which are variables that may affect the survival time or the risk of the event. Therefore, multiple methods will be applied to our research.
+
+
+\ \par
+## Planned Timeline
+|          Date          |                Descriptions                           |
+|:----------------------:|:-----------------------------------------------------:|
+| 11/11/2023             | Complete the proposal                                 |
+| 11/12/2023- 11/19/2023 | Data collection, cleaning, and exploratory analysis   |
+| 11/20/2023- 12/02/2023 | Data analysis, create report                          |
+| 12/03/2023- 12/09/2023 | Create website and interactive graphics               |
+| 12/10/2023             | Submit                                                |

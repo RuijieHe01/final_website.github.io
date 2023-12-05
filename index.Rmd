@@ -7,13 +7,16 @@ output:
     theme: cosmo
 ---
 
-# This is our final project
+# **This is our final project**
+
 
 ![](images/homepage.jpg)
 
-# Motivation
+# **Motivation**
 
-# Project Directory
+> AIDS, or Acquired Immunodeficiency Syndrome, remains a significant global health challenge, with millions affected by HIV[1]. Effective treatment strategies are crucial for improving the quality of life of patients and prolonging survival[2]. Our analysis seeks to leverage this rich dataset to gain insights into factors influencing survival outcomes in AIDS patients and to evaluate the efficacy of different treatment modalities.
+
+# **Project Directory**
 
 * [Introduction](Introduction.html): Personal Information
 
@@ -27,4 +30,14 @@ output:
 
 * [Report](Project-report.html): 
 
-# Team Member
+# **Team Member**
+
+* Joshua Carpenter(jrc2270)
+
+* Mingzhi Chen(mc5503)
+
+* Ruoying Deng(rd3097)
+
+* Ruijie He(rh3195)
+
+* Zhuodiao Kuang(zk2275)

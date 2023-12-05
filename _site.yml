@@ -3,20 +3,20 @@ output_dir: "."
 navbar:
   title: "Home"
   right:
+    - text: "Project Plan"
+      href: Project_plan.html
     - text: "Introduction"
       href: Introduction.html
     - text: "Data"
       href: Data.html
-    - text: "EDA"
-      href: EDA.html
     - text: "Survival Analysis"
-      href: Survival_analysis.html
+      href: Survival-analysis.html
     - text: "Modeling"
       href: Modeling.html
     - text: "Conclusion"
       href: Conclusion.html
     - text: "Shiny App"
-      href: 
+      href: https://mingzhicumc.shinyapps.io/shiny_dashboard_template/
     - text: "Report"
       href: Project-report.html
     - icon: fa-youtube fa-lg
