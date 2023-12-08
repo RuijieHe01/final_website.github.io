@@ -5,12 +5,15 @@ output:
     toc: true
     toc_float: true
     css: style.css
-    theme: cosmo
+    theme: journal
 ---
+
+
+\ \par
 
 ## Project Title
 
-* Factors influencing survival outcomes in AIDS patients
+* Analyzing the Impact of Treatment Strategies in AIDS patients
 
 
 \ \par
