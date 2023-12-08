@@ -7,14 +7,19 @@ output:
     theme: journal
 ---
 
+```{r include=FALSE}
+library(tidyverse)
+library(knitr)
+library(viridis)
+knitr::opts_chunk$set(echo = FALSE, message = FALSE)
+```
+
+
 To get a idea of some of the factors that affect treatment of AIDs, we looked at a dataset published in 1996 by the AIDs Clinical Trials Group. The study where these data were collected compared 4 different AIDs treatments, but additionally this dataset contains information on 21 other predictors of death due to AIDS.
 
 # Factors that Affect Death Due to AIDs
 
-```{r echo=FALSE}
-library(tidyverse)
-library(knitr)
-library(viridis)
+```{r}
 aids_df <- read_csv("data/aids.csv") %>%
   mutate(
     cid = factor(cid),
@@ -35,16 +40,26 @@ aids_df <- read_csv("data/aids.csv") %>%
   )
 ```
 
-```{r}
+Having a look at some of the categorical variables in the dataset, most do seem to be related to death due to AIDs, with the exception of hemophilia and perhaps race.
+
+```{r fig.width=10, fig.height=10}
 comp_bar <- function(x, xlab) {
   ggplot(data = aids_df, mapping = aes(x = .data[[x]], fill = cid)) +
     geom_bar(position = "fill") +
     scale_fill_viridis_d(labels = c("Censoring", "Failure")) +
+    scale_x_discrete(guide = guide_axis(angle = -45)) +
     labs(x = xlab, y = "Proportion", fill = "Censoring") +
     theme_classic()
 }
-vars_to_plot = c("trt", "hemo", "homo", "drugs")
-labels_to_plot <- c("Treatment", "Hemophilia", "Homosexual", "History of Drug Use")
-map2(vars_to_plot, labels_to_plot, comp_bar)
+vars_to_plot = c("trt", "hemo", "homo", "drugs", "oprior", "z30", 
+                 "race", "gender", "str2", "symptom", "offtrt")
+labels_to_plot <- c("Treatment", "Hemophilia", "Homosexual", 
+                    "History of Drug Use", 
+                    "Non-ZDV antiretroviral therapy pre-175", 
+                    "ZDV in the 30 days prior to 175", "Race",
+                    "Gender", "Antiretroviral History", "Symptoms", 
+                    "Off-trt before 96+/-5 weeks")
+plots <- map2(vars_to_plot, labels_to_plot, comp_bar)
+do.call(gridExtra::grid.arrange, plots)
 ```
 
