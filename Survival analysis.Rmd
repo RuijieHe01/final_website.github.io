@@ -5,10 +5,13 @@ output:
     toc: true
     toc_float: true
     code_folding: hide
-    css: nicepage.css
-    theme: cosmo
+    css: style.css
+    theme: journal
 ---
 
+
+
+\ \par
 ```{r setup, echo = FALSE, cache = FALSE, message = FALSE}
 rm(list = ls())
 library(tidyverse)

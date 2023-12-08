@@ -6,13 +6,11 @@ output:
     toc_float: true
     highlight: tango
     css: style.css
-    theme: cosmo
+    theme: journal
 ---
 
 ```{css}
 .columns {display: flex;}
-h1 {color: red;}
-h2 {color: green;}
 ```
 
 
@@ -30,6 +28,13 @@ Additionally, we think this project will allow us to combine skills learned in t
 # Background Information
 
 The first AIDS case in the United States was diagnosed in 1981. Human Immunodefficiency Virus (HIV), the chronic infected virus that damages people's immune system, is been identified in 1984 as the cause that may lead to acquired immunodeficiency syndrome (AIDS). However, researchers believe that long before any confirmed cases, AIDS The virus has already spread across the world. [3] In the year since the emergence of AIDS, the underestimated scale and rapid spread of the disease has significantly challenging the global public health and economic growth. Countless families and communities were devastated worldwide. By the beginning of 21st century, about 56 million people has get HIV infection in total.[4] Presently, approximately 1.2 million individuals aged 13 and older in the United States living with HIV.[5] Faced with the negative social impact of HIV, the current top priority for researchers is to better understand HIV transmission and incidence trends, control the global impact of AIDS, and improve the treatment effects and quality of life of AIDS patients.
+
+<center>
+
+<iframe src="https://map.aidsvu.org/county-frame?datatype=prevalence&ratescases=rates&filters=overall&area=All&basemap=cjjopfjjb03ag2rpnrv3w5k62&year=hidden&countytype=all"width='800' height='500' style='border:2px solid black;' ></iframe>
+
+<center>
+
 
 # Anticipated Data Sources
 
