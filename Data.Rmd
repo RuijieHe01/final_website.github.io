@@ -1,5 +1,5 @@
 ---
-title: "My awesome website"
+title: "Data"
 output: 
   html_document:
     toc: true
@@ -7,24 +7,7 @@ output:
     theme: cosmo
 ---
 
-# This is our final project
+To get a idea of some of the factors that affect treatment of AIDs, we looked at a dataset published in 1996 by the AIDs Clinical Trials Group. The study where these data were collected compared 4 different AIDs treatments, but additionally this dataset contains information on 21 other predictors of death due to AIDS.
 
-![](images/homepage.jpg)
+# Factors the Affect Death Due to AIDs
 
-# Motivation
-
-# Project Directory
-
-* [Introduction](Introduction.html): Personal Information
-
-* [Data](Data.html):
-
-* [Survival analysis](Survival_analysis.html):
-
-* [Modeling](Modeling.html):
-
-* [Shiny]():
-
-* [Report](Project-report.html): 
-
-# Team Member
