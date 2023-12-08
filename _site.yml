@@ -4,7 +4,7 @@ navbar:
   title: "Home"
   right:
     - text: "Project Plan"
-      href: Project_plan.html
+      href: project_plan.html
     - text: "Introduction"
       href: Introduction.html
     - text: "Data"

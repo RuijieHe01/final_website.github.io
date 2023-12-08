@@ -13,7 +13,7 @@ output:
 
 ## Project Title
 
-* Analyzing the Impact of Treatment Strategies in AIDS patients
+* Survival Analysis of the Impact of Treatment Strategies in AIDS patients
 
 
 \ \par
