@@ -11,7 +11,7 @@ navbar:
       href: Data.html
     - text: "Survival Analysis"
       href: Survival-analysis.html
-    - text: "Methods"
+    - text: "Method"
       href: Method.html
     - text: "Shiny App"
       href: https://mingzhicumc.shinyapps.io/shiny_dashboard_template/
