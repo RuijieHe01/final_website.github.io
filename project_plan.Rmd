@@ -4,7 +4,6 @@ output:
   html_document:
     toc: true
     toc_float: true
-    css: style.css
     theme: journal
 ---
 
@@ -40,3 +39,11 @@ For our final project, we will start with data wrangling. Then, we will create a
 | 11/20/2023- 12/02/2023 | Data analysis, create report                          |
 | 12/03/2023- 12/09/2023 | Create website and interactive graphics               |
 | 12/10/2023             | Submit                                                |
+
+
+\ \par
+## Reference
+
+[1] Whiteside, A. and D. Wilson, Health and AIDS in 2019 and beyond. Afr J AIDS Res, 2018. 17(4): p. iii-v.
+
+[2] Eisinger, R. W., & Fauci, A. S. (2018). Ending the HIV/AIDS pandemic. Emerging infectious diseases, 24(3), 413.

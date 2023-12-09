@@ -1,16 +1,19 @@
 ---
-title: "My awesome website"
+title: "Survival Analysis of the Impact of Treatment Strategies in AIDS patients"
 output: 
   html_document:
     toc: true
     toc_float: true
     theme: journal
+    css: profile_picture.css
 ---
 
-# **This is our final project**
+
+**Key word**: *AIDS, Survival Analysis, Kaplan-Meier Curves, Log-rank Tests, Cox Proportional Hazards Model*
 
 
 ![](images/homepage.jpg)
+
 
 # **Motivation**
 
@@ -18,26 +21,47 @@ output:
 
 # **Project Directory**
 
-* [Introduction](Introduction.html): Personal Information
+* [Introduction](Introduction.html): A fully introduction of the background and data source of our survival analysis is given. We also state our motivation on why chose to conduct this study.
 
-* [Data](Data.html):
+* [Data](Data.html): This section has included the description of the data we have used in this study.
 
-* [Survival analysis](Survival_analysis.html):
+* [Survival analysis](survival-analysis.html): In this section, we performed survival analysis. The life table is included which provides interval-based survival summaries, while Kaplan-Meier curves, log-rank tests, and the Cox proportional hazards model assessed survival dynamics.
 
-* [Modeling](Modeling.html):
+* [Method](Method.html): In this section, we include our method on conducting the exploratory data analysis, which identifies the baseline characteristics, and categorizing variables into continuous and categorical types.
 
-* [Shiny]():
+* [Shiny](https://mingzhicumc.shinyapps.io/shiny_dashboard_template/): In this section, we made our Kaplan-Meier Survival Estimate Shiny graph.
 
-* [Report](Project-report.html): 
+* [Report](Report.html): In this section, we include all our analysis and conclusion into a complete and comprehensive report.
 
-# **Team Member**
 
-* Joshua Carpenter(jrc2270)
 
-* Mingzhi Chen(mc5503)
 
-* Ruoying Deng(rd3097)
+# Our Great Team Members
 
-* Ruijie He(rh3195)
+\ \par
+<center>
 
-* Zhuodiao Kuang(zk2275)
+<img src="./images/joshua.jpg" alt = "Joshua Carpenter" class = "profile-pic">
+
+$$Joshua\ Carpenter\ ()$$
+
+\ \par
+<img src="./images/ruijiehe.jpg" alt = "Joshua Carpenter" class = "profile-pic">
+
+$$Ruijie\ He\ (rh3195)$$
+
+\ \par
+<img src="./images/ruoyingdeng.jpg" alt = "Joshua Carpenter" class = "profile-pic">
+
+$$Ruoying\ Deng\ (rd3097)$$
+
+\ \par
+<img src="./images/zhuodiaokuang.jpg" alt = "Joshua Carpenter" class = "profile-pic">
+
+$$Zhuodiao\ Kuang\ (zk2275)$$
+
+\ \par
+<img src="./images/mingzhichen.jpg" alt = "Joshua Carpenter" class = "profile-pic">
+
+$$Mingzhi\ Chen\ (mc5503)$$
+<center>

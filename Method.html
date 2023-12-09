@@ -1,0 +1,692 @@
+<!DOCTYPE html>
+
+<html>
+
+<head>
+
+<meta charset="utf-8" />
+<meta name="generator" content="pandoc" />
+<meta http-equiv="X-UA-Compatible" content="IE=EDGE" />
+
+
+
+<meta name="date" content="2023-12-08" />
+
+<title>Methods</title>
+
+<script src="site_libs/header-attrs-2.25/header-attrs.js"></script>
+<script src="site_libs/jquery-3.6.0/jquery-3.6.0.min.js"></script>
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<link href="site_libs/bootstrap-3.3.5/css/journal.min.css" rel="stylesheet" />
+<script src="site_libs/bootstrap-3.3.5/js/bootstrap.min.js"></script>
+<script src="site_libs/bootstrap-3.3.5/shim/html5shiv.min.js"></script>
+<script src="site_libs/bootstrap-3.3.5/shim/respond.min.js"></script>
+<style>h1 {font-size: 34px;}
+       h1.title {font-size: 38px;}
+       h2 {font-size: 30px;}
+       h3 {font-size: 24px;}
+       h4 {font-size: 18px;}
+       h5 {font-size: 16px;}
+       h6 {font-size: 12px;}
+       code {color: inherit; background-color: rgba(0, 0, 0, 0.04);}
+       pre:not([class]) { background-color: white }</style>
+<script src="site_libs/jqueryui-1.13.2/jquery-ui.min.js"></script>
+<link href="site_libs/tocify-1.9.1/jquery.tocify.css" rel="stylesheet" />
+<script src="site_libs/tocify-1.9.1/jquery.tocify.js"></script>
+<script src="site_libs/navigation-1.1/tabsets.js"></script>
+<link href="site_libs/highlightjs-9.12.0/default.css" rel="stylesheet" />
+<script src="site_libs/highlightjs-9.12.0/highlight.js"></script>
+<link href="site_libs/font-awesome-6.4.2/css/all.min.css" rel="stylesheet" />
+<link href="site_libs/font-awesome-6.4.2/css/v4-shims.min.css" rel="stylesheet" />
+
+<style type="text/css">
+  code{white-space: pre-wrap;}
+  span.smallcaps{font-variant: small-caps;}
+  span.underline{text-decoration: underline;}
+  div.column{display: inline-block; vertical-align: top; width: 50%;}
+  div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+  ul.task-list{list-style: none;}
+    </style>
+
+<style type="text/css">code{white-space: pre;}</style>
+<script type="text/javascript">
+if (window.hljs) {
+  hljs.configure({languages: []});
+  hljs.initHighlightingOnLoad();
+  if (document.readyState && document.readyState === "complete") {
+    window.setTimeout(function() { hljs.initHighlighting(); }, 0);
+  }
+}
+</script>
+
+
+
+
+
+
+
+
+
+<style type = "text/css">
+.main-container {
+  max-width: 940px;
+  margin-left: auto;
+  margin-right: auto;
+}
+img {
+  max-width:100%;
+}
+.tabbed-pane {
+  padding-top: 12px;
+}
+.html-widget {
+  margin-bottom: 20px;
+}
+button.code-folding-btn:focus {
+  outline: none;
+}
+summary {
+  display: list-item;
+}
+details > summary > p:only-child {
+  display: inline;
+}
+pre code {
+  padding: 0;
+}
+</style>
+
+
+<style type="text/css">
+.dropdown-submenu {
+  position: relative;
+}
+.dropdown-submenu>.dropdown-menu {
+  top: 0;
+  left: 100%;
+  margin-top: -6px;
+  margin-left: -1px;
+  border-radius: 0 6px 6px 6px;
+}
+.dropdown-submenu:hover>.dropdown-menu {
+  display: block;
+}
+.dropdown-submenu>a:after {
+  display: block;
+  content: " ";
+  float: right;
+  width: 0;
+  height: 0;
+  border-color: transparent;
+  border-style: solid;
+  border-width: 5px 0 5px 5px;
+  border-left-color: #cccccc;
+  margin-top: 5px;
+  margin-right: -10px;
+}
+.dropdown-submenu:hover>a:after {
+  border-left-color: #adb5bd;
+}
+.dropdown-submenu.pull-left {
+  float: none;
+}
+.dropdown-submenu.pull-left>.dropdown-menu {
+  left: -100%;
+  margin-left: 10px;
+  border-radius: 6px 0 6px 6px;
+}
+</style>
+
+<script type="text/javascript">
+// manage active state of menu based on current page
+$(document).ready(function () {
+  // active menu anchor
+  href = window.location.pathname
+  href = href.substr(href.lastIndexOf('/') + 1)
+  if (href === "")
+    href = "index.html";
+  var menuAnchor = $('a[href="' + href + '"]');
+
+  // mark the anchor link active (and if it's in a dropdown, also mark that active)
+  var dropdown = menuAnchor.closest('li.dropdown');
+  if (window.bootstrap) { // Bootstrap 4+
+    menuAnchor.addClass('active');
+    dropdown.find('> .dropdown-toggle').addClass('active');
+  } else { // Bootstrap 3
+    menuAnchor.parent().addClass('active');
+    dropdown.addClass('active');
+  }
+
+  // Navbar adjustments
+  var navHeight = $(".navbar").first().height() + 15;
+  var style = document.createElement('style');
+  var pt = "padding-top: " + navHeight + "px; ";
+  var mt = "margin-top: -" + navHeight + "px; ";
+  var css = "";
+  // offset scroll position for anchor links (for fixed navbar)
+  for (var i = 1; i <= 6; i++) {
+    css += ".section h" + i + "{ " + pt + mt + "}\n";
+  }
+  style.innerHTML = "body {" + pt + "padding-bottom: 40px; }\n" + css;
+  document.head.appendChild(style);
+});
+</script>
+
+<!-- tabsets -->
+
+<style type="text/css">
+.tabset-dropdown > .nav-tabs {
+  display: inline-table;
+  max-height: 500px;
+  min-height: 44px;
+  overflow-y: auto;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+}
+
+.tabset-dropdown > .nav-tabs > li.active:before, .tabset-dropdown > .nav-tabs.nav-tabs-open:before {
+  content: "\e259";
+  font-family: 'Glyphicons Halflings';
+  display: inline-block;
+  padding: 10px;
+  border-right: 1px solid #ddd;
+}
+
+.tabset-dropdown > .nav-tabs.nav-tabs-open > li.active:before {
+  content: "\e258";
+  font-family: 'Glyphicons Halflings';
+  border: none;
+}
+
+.tabset-dropdown > .nav-tabs > li.active {
+  display: block;
+}
+
+.tabset-dropdown > .nav-tabs > li > a,
+.tabset-dropdown > .nav-tabs > li > a:focus,
+.tabset-dropdown > .nav-tabs > li > a:hover {
+  border: none;
+  display: inline-block;
+  border-radius: 4px;
+  background-color: transparent;
+}
+
+.tabset-dropdown > .nav-tabs.nav-tabs-open > li {
+  display: block;
+  float: none;
+}
+
+.tabset-dropdown > .nav-tabs > li {
+  display: none;
+}
+</style>
+
+<!-- code folding -->
+
+
+
+<style type="text/css">
+
+#TOC {
+  margin: 25px 0px 20px 0px;
+}
+@media (max-width: 768px) {
+#TOC {
+  position: relative;
+  width: 100%;
+}
+}
+
+@media print {
+.toc-content {
+  /* see https://github.com/w3c/csswg-drafts/issues/4434 */
+  float: right;
+}
+}
+
+.toc-content {
+  padding-left: 30px;
+  padding-right: 40px;
+}
+
+div.main-container {
+  max-width: 1200px;
+}
+
+div.tocify {
+  width: 20%;
+  max-width: 260px;
+  max-height: 85%;
+}
+
+@media (min-width: 768px) and (max-width: 991px) {
+  div.tocify {
+    width: 25%;
+  }
+}
+
+@media (max-width: 767px) {
+  div.tocify {
+    width: 100%;
+    max-width: none;
+  }
+}
+
+.tocify ul, .tocify li {
+  line-height: 20px;
+}
+
+.tocify-subheader .tocify-item {
+  font-size: 0.90em;
+}
+
+.tocify .list-group-item {
+  border-radius: 0px;
+}
+
+
+</style>
+
+
+
+</head>
+
+<body>
+
+
+<div class="container-fluid main-container">
+
+
+<!-- setup 3col/9col grid for toc_float and main content  -->
+<div class="row">
+<div class="col-xs-12 col-sm-4 col-md-3">
+<div id="TOC" class="tocify">
+</div>
+</div>
+
+<div class="toc-content col-xs-12 col-sm-8 col-md-9">
+
+
+
+
+<div class="navbar navbar-default  navbar-fixed-top" role="navigation">
+  <div class="container">
+    <div class="navbar-header">
+      <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-bs-toggle="collapse" data-target="#navbar" data-bs-target="#navbar">
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </button>
+      <a class="navbar-brand" href="index.html">Home</a>
+    </div>
+    <div id="navbar" class="navbar-collapse collapse">
+      <ul class="nav navbar-nav">
+        
+      </ul>
+      <ul class="nav navbar-nav navbar-right">
+        <li>
+  <a href="project_plan.html">Project Plan</a>
+</li>
+<li>
+  <a href="Introduction.html">Introduction</a>
+</li>
+<li>
+  <a href="Data.html">Data</a>
+</li>
+<li>
+  <a href="Survival-analysis.html">Survival Analysis</a>
+</li>
+<li>
+  <a href="method.html">Methods</a>
+</li>
+<li>
+  <a href="https://mingzhicumc.shinyapps.io/shiny_dashboard_template/">Shiny App</a>
+</li>
+<li>
+  <a href="Report.html">Report</a>
+</li>
+<li>
+  <a href="mailto:rh3195@cumc.columbia.edu?subject=About%20your%20website">
+    <span class="fa fa-youtube fa-lg"></span>
+     
+  </a>
+</li>
+<li>
+  <a href="https://github.com/RuijieHe01/final_website.github.io/">
+    <span class="fa fa-github fa-lg"></span>
+     
+  </a>
+</li>
+      </ul>
+    </div><!--/.nav-collapse -->
+  </div><!--/.container -->
+</div><!--/.navbar -->
+
+<div id="header">
+
+
+
+<h1 class="title toc-ignore">Methods</h1>
+<h4 class="date">2023-12-08</h4>
+
+</div>
+
+
+ 
+<div id="methods" class="section level1">
+<h1>3 Methods</h1>
+ 
+<div id="data-description" class="section level2">
+<h2>3.1 Data Description</h2>
+<p>The ACTG Study 175 dataset, published in 1996, stands as a
+comprehensive repository of healthcare data meticulously compiled for
+AIDS patients. The primary objective of this dataset is to facilitate
+the prediction of patient survival within a predefined observation
+period, shedding light on the efficacy of novel AIDS treatments.
+Boasting a substantial scale, the dataset encompasses 2139 instances,
+each characterized by a rich set of 23 features. We assumed
+non-informative right censoring, where the reason for censoring is
+unrelated to the outcome. Notably, this dataset is free from missing
+data, ensuring the reliability and completeness of the information. As a
+testament to its comprehensiveness, the variables encapsulate treatment
+indicators, demographics, medical history, and the Karnofsky score,
+which is an integral metric for assessing overall health. For a detailed
+breakdown of the 23 variables and their descriptions, please refer to
+the accompanying form in the appendix.</p>
+</div>
+<div id="data-exploration" class="section level2">
+<h2>3.2 Data Exploration</h2>
+<div id="data-summary" class="section level3">
+<h3>3.2.1 Data Summary</h3>
+<p>This part analyzed the baseline characteristics of participants
+enrolled in the AIDS Clinical Trials Group Study 175. The dataset
+comprises a diverse range of variables, categorized into continuous and
+categorical types, each offering insights into the participant profiles
+and study conditions.</p>
+<p>The continuous variables include age, CD4 and CD8 counts at baseline
+and 20 weeks, duration of pre-treatment antiretroviral therapy, time to
+failure or censoring, and weight at baseline. Participants ranged in age
+from 12 to 70 years, with a median age of 34 years. The median CD4 count
+at baseline was 340, increasing slightly to 353 at 20 weeks. Similarly,
+CD8 counts showed an increase from a median of 893 at baseline to 865 at
+20 weeks. The participants had a varied duration of pre-treatment with
+antiretroviral therapy, ranging from 0 to 2851 days. The median time to
+failure or censoring was observed at 997 days. Weight varied widely
+among participants, with a median of 74.39 kg.</p>
+<p>The categorical variables offer insights into treatment types,
+hemophilia status, sexual orientation, history of IV drug use, Karnofsky
+score, prior antiretroviral therapy, race, gender, symptomatic
+indicators, and treatment indicators. Treatment types were evenly
+distributed among the four categories. A majority of participants did
+not have hemophilia (1959 out of 2139), were engaged in
+homosexual/bisexual activities (1414 out of 2139), and had no history of
+IV drug use (1858 out of 2139). Most participants had a high Karnofsky
+score of 100. The majority were also not on non-ZDV antiretroviral
+therapy pre-study and had used ZDV prior to the study. The study
+population was predominantly male (1771 out of 2139) and white (1522 out
+of 2139). Regarding antiretroviral history, a significant proportion
+were experienced in antiretroviral therapy. The majority of participants
+were asymptomatic, and a large number were on treatments other than ZDV
+only. The off-treatment indicator before 96±5 weeks showed a larger
+number not going off treatment, and censoring was more common than
+failure in the outcome variable.</p>
+</div>
+</div>
+<div id="life-table" class="section level2">
+<h2>3.3 Life Table</h2>
+<p>Life tables can provide interval-based summaries of survival data.
+For each treatment group, we calculated the number at risk, the number
+of events, and the proportion surviving at each interval. The hazard
+function was estimated as the ratio of the number of events to the
+number at risk in each interval. These estimates allowed us to observe
+the mortality rate’s pattern over time and identify any periods with
+unusually high or low rates.</p>
+</div>
+<div id="non-parametric-survival-estimate" class="section level2">
+<h2>3.4 Non-parametric Survival Estimate</h2>
+<div id="kaplan-meier-estimator" class="section level3">
+<h3>3.4.1 Kaplan-Meier estimator</h3>
+<p>The Kaplan-Meier estimator is a non-parametric estimation of the
+survival function, S(t), which represents the probability of surviving
+past time t. The Kaplan-Meier estimator for the survival function at
+time <span class="math inline">\(t\)</span> is given by: <span
+class="math display">\[ \hat{S}(t) = \prod_{i: t_i \leq t} \left(1 -
+\frac{d_i}{n_i}\right) \]</span> where <span
+class="math inline">\(t_i\)</span> are the distinct observed event
+times, <span class="math inline">\(d_i\)</span> is the number of events
+at <span class="math inline">\(t_i\)</span>, and <span
+class="math inline">\(n_i\)</span> is the number of individuals at risk
+just prior to <span class="math inline">\(t_i\)</span>. For each group,
+the Kaplan-Meier curve was plotted to illustrate the survival experience
+of participants over the study period. This method allowed us to utilize
+the full timeline of each participant, taking into account
+right-censoring, a common assumption where individuals’ end of study
+data may not be due to the event of interest but rather due to loss of
+follow-up or study termination.</p>
+</div>
+<div id="nelson-aalen-estimator" class="section level3">
+<h3>3.4.2 Nelson-Aalen Estimator</h3>
+<p>Similar to the Kaplan-Meier estimator, the Nelson-Aalen estimator is
+another non-parametric approach used in survival analysis. However,
+while the Kaplan-Meier estimator focuses on estimating the survival
+function, the Nelson-Aalen estimator is primarily used to estimate the
+cumulative hazard function, denoted as H(t).</p>
+<p><span class="math display">\[H(t)=\sum_{i:t_i\leq
+t}\frac{d_i}{n_i}\]</span></p>
+<p>Hence,</p>
+<p><span class="math display">\[\hat{S}(t) = \prod_{t_i\leq t}
+e^{-\frac{d_i}{n_i}}\]</span></p>
+<p>This estimator accommodates right-censored data, making it valuable
+in studies with incomplete follow-ups.It is worth noting that the
+Nelson-Aalen estimator generally provides more conservative estimates of
+the cumulative hazard function compared to the Kaplan-Meier
+estimator.</p>
+</div>
+</div>
+<div id="non-parametric-test" class="section level2">
+<h2>3.5 Non-parametric test</h2>
+<div id="log-rank-test" class="section level3">
+<h3>3.5.1 Log rank test</h3>
+<p>Log-rank test is a non-parametric test based on the observed and
+expected number of events in each group at each observed event time. It
+provides a test statistic that, under the null hypothesis of no
+difference between groups, follows a chi-square distribution. The
+log-rank test is particularly useful as it gives more weight to
+differences in survival times when more participants are at risk.</p>
+<p>Let <span class="math inline">\(t_1, t_2, \ldots, t_D\)</span> be the
+distinct event times observed across all groups. At each event time
+<span class="math inline">\(t_i\)</span>, let <span
+class="math inline">\(O_{k,i}\)</span> be the observed number of events
+in group <span class="math inline">\(k\)</span>, and <span
+class="math inline">\(N_{k,i}\)</span> the number of subjects at risk in
+group <span class="math inline">\(k\)</span>. The total number of events
+at time <span class="math inline">\(t_i\)</span> is <span
+class="math inline">\(O_i\)</span>, and the total number at risk is
+<span class="math inline">\(N_i\)</span>. The expected number of events
+for group <span class="math inline">\(k\)</span> at time <span
+class="math inline">\(t_i\)</span> under the null hypothesis is given
+by: <span class="math display">\[ E_{k,i} = O_i \frac{N_{k,i}}{N_i}
+\]</span> and the variance of the expected number of events is: <span
+class="math display">\[ V_{k,i} = E_{k,i} \left(1 - \frac{E_{k,i}}{N_i}
+\right) \left( \frac{N_i - N_{k,i}}{N_i - 1} \right) \]</span> if <span
+class="math inline">\(N_i &gt; 1\)</span>, otherwise <span
+class="math inline">\(V_{k,i} = 0\)</span>.</p>
+<p>The log-rank test statistic is then calculated as: <span
+class="math display">\[ \chi^2 = \sum_{i=1}^{D} \frac{(O_{k,i} -
+E_{k,i})^2}{V_{k,i}} \]</span> which under the null hypothesis
+approximates a chi-square distribution with <span
+class="math inline">\(K-1\)</span> degrees of freedom.</p>
+</div>
+<div id="trend-log-rank-test" class="section level3">
+<h3>3.5.2 Trend Log Rank Test</h3>
+<p>The Trend Log Rank Test is an extension of the log-rank test,
+designed to evaluate survival data across multiple groups, especially
+when there is an ordinal relationship or trend among the groups. This
+test is particularly useful in scenarios where the proportional hazards
+assumption holds true across these groups.</p>
+<p>For the Trend Log Rank Test, let’s denote <span
+class="math inline">\(K\)</span> groups, and for the <span
+class="math inline">\(k^{th}\)</span> group, the log-rank statistics can
+be represented as:</p>
+<p><span class="math display">\[ L_k = \sum_{i=1}^{r&#39;_k} (d_{0i} -
+e_{ki}) \]</span></p>
+<p>where <span class="math inline">\(d_{0i}\)</span> is the observed
+number of events and <span class="math inline">\(e_{ki}\)</span> is the
+expected number of events under the null hypothesis for the <span
+class="math inline">\(i^{th}\)</span> time period in the <span
+class="math inline">\(k^{th}\)</span> group.</p>
+<p>The variance of <span class="math inline">\(L_k\)</span> is given
+by:</p>
+<p><span class="math display">\[ \text{var}(L_k) = \sum_{i=1}^{r&#39;_k}
+\frac{n_{0i}n_{ki}d_{ki}(n_{0ki} - d_{0ki})}{n_{0ki}^2 (n_{0ki} - 1)}
+\]</span></p>
+<p>where <span class="math inline">\(n_{0i}\)</span>, <span
+class="math inline">\(n_{ki}\)</span>, <span
+class="math inline">\(d_{ki}\)</span>, and <span
+class="math inline">\(n_{0ki}\)</span> represent the number of subjects
+at risk, the number of subjects at risk in the <span
+class="math inline">\(k^{th}\)</span> group, the number of events in the
+<span class="math inline">\(k^{th}\)</span> group, and the total number
+of subjects at risk at the <span class="math inline">\(i^{th}\)</span>
+time point, respectively.</p>
+<p>The trend log-rank test statistic, <span
+class="math inline">\(LS\)</span>, is then calculated as follows:</p>
+<p><span class="math display">\[ LS = \left(\frac{\sum_{k=1}^K \omega_k
+L_k}{\sqrt{\sum_{k=1}^K (\omega_k - \overline{\omega})^2
+\text{var}(L_k)}}\right)^2 \]</span></p>
+<p>Here, <span class="math inline">\(\omega_k\)</span> represents the
+weight for the <span class="math inline">\(k^{th}\)</span> group, and
+<span class="math inline">\(\overline{\omega}\)</span> is the average
+weight, calculated as:</p>
+<p><span class="math display">\[ \overline{\omega} = \frac{\sum_{k=1}^K
+\omega_k e_k}{\sum_{k=1}^K e_k} \]</span></p>
+<p>Under the null hypothesis of no trend across the groups, the test
+statistic <span class="math inline">\(LS\)</span> follows a chi-square
+distribution with one degree of freedom (<span
+class="math inline">\(\chi_1^2\)</span>).</p>
+</div>
+<div id="weighted-trend-log-rank-family-of-test" class="section level3">
+<h3>3.5.3 Weighted Trend Log Rank Family of Test</h3>
+<p>The Weighted Trend Log Rank Test extends the traditional Log Rank
+Test by incorporating weights into the analysis. This approach enhances
+the flexibility of the test, allowing it to cater to specific study
+designs or hypotheses. In this variant, the statistic <span
+class="math inline">\(L_{k,w}\)</span> is used, which is defined as
+<span class="math inline">\(L_{k,w} = \sum_{i=1}^k \omega_i (d_{0i} -
+e_{0i})\)</span>. Here, <span class="math inline">\(\omega_i\)</span>
+denotes the weight assigned to the <span
+class="math inline">\(i^{th}\)</span> event. Different weighting schemes
+can be applied depending on the study requirements. The choice of
+weights can significantly affect the sensitivity of the test to early or
+late differences in survival times.</p>
+<p>Please refer to Table 7 in the appendix for more details.</p>
+</div>
+</div>
+<div id="cox-proportional-hazardph-model" class="section level2">
+<h2>3.6 Cox Proportional Hazard(PH) Model</h2>
+<p>In this study, another modeling approach used is Cox PH Model. It is
+built to perform survival analysis and predict the survival time of
+patients and predictor variables, As a semi-parametric model, it makes
+fewer assumptions about the underlying hazard function compared to fully
+parametric models. The primary assumption of the CoxPH model is that the
+hazard ratio is constant over time, which implies that the relative risk
+of an event remains constant across different time points.</p>
+<p>Compared with prior approaches such as the log-rank test, Cox PH
+model allows analysis that considers multiple factors, the covariates.
+Final model was chosen based on stepwise approaches including forward,
+backward, and both. The model with the lowest AIC is selected.
+Generally, the Cox-PH model has the function as:</p>
+<p><span class="math display">\[ h(t|Z=z) = h_0(t)e^{\beta z} \]</span>
+where <span class="math inline">\(h_0(t)\)</span> is the baseline hazard
+function, Z can be a vector of p covariates, <span
+class="math inline">\(\beta\)</span> is a vector of p coefficients.</p>
+</div>
+<div id="assumptions-and-model-checking" class="section level2">
+<h2>3.7 Assumptions and Model Checking</h2>
+<p>The significant levels of all tests in our analysis are all 0.05. We
+did not assume proportional hazards given the non-parametric nature of
+the Kaplan-Meier and log-rank methods. However, we also employed a Cox
+proportional hazards model which would need to test this assumption
+mentioned above using diagnostic plots or tests based on Schoenfeld
+residuals.</p>
+</div>
+</div>
+
+
+
+</div>
+</div>
+
+</div>
+
+<script>
+
+// add bootstrap table styles to pandoc tables
+function bootstrapStylePandocTables() {
+  $('tr.odd').parent('tbody').parent('table').addClass('table table-condensed');
+}
+$(document).ready(function () {
+  bootstrapStylePandocTables();
+});
+
+
+</script>
+
+<!-- tabsets -->
+
+<script>
+$(document).ready(function () {
+  window.buildTabsets("TOC");
+});
+
+$(document).ready(function () {
+  $('.tabset-dropdown > .nav-tabs > li').click(function () {
+    $(this).parent().toggleClass('nav-tabs-open');
+  });
+});
+</script>
+
+<!-- code folding -->
+
+<script>
+$(document).ready(function ()  {
+
+    // temporarily add toc-ignore selector to headers for the consistency with Pandoc
+    $('.unlisted.unnumbered').addClass('toc-ignore')
+
+    // move toc-ignore selectors from section div to header
+    $('div.section.toc-ignore')
+        .removeClass('toc-ignore')
+        .children('h1,h2,h3,h4,h5').addClass('toc-ignore');
+
+    // establish options
+    var options = {
+      selectors: "h1,h2,h3",
+      theme: "bootstrap3",
+      context: '.toc-content',
+      hashGenerator: function (text) {
+        return text.replace(/[.\\/?&!#<>]/g, '').replace(/\s/g, '_');
+      },
+      ignoreSelector: ".toc-ignore",
+      scrollTo: 0
+    };
+    options.showAndHide = true;
+    options.smoothScroll = true;
+
+    // tocify
+    var toc = $("#TOC").tocify(options).data("toc-tocify");
+});
+</script>
+
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+  (function () {
+    var script = document.createElement("script");
+    script.type = "text/javascript";
+    script.src  = "https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML";
+    document.getElementsByTagName("head")[0].appendChild(script);
+  })();
+</script>
+
+</body>
+</html>

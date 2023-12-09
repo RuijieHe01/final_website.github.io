@@ -1,0 +1,122 @@
+---
+title: "Methods"
+date: "2023-12-08"
+output:
+  html_document:
+    toc: true
+    toc_float: true
+    theme: journal
+  
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+
+\ \par
+# 3 Methods
+
+
+\ \par
+## 3.1 Data Description
+
+The ACTG Study 175 dataset, published in 1996, stands as a comprehensive repository of healthcare data meticulously compiled for AIDS patients. The primary objective of this dataset is to facilitate the prediction of patient survival within a predefined observation period, shedding light on the efficacy of novel AIDS treatments. Boasting a substantial scale, the dataset encompasses 2139 instances, each characterized by a rich set of 23 features. We assumed non-informative right censoring, where the reason for censoring is unrelated to the outcome. Notably, this dataset is free from missing data, ensuring the reliability and completeness of the information. As a testament to its comprehensiveness, the variables encapsulate treatment indicators, demographics, medical history, and the Karnofsky score, which is an integral metric for assessing overall health. For a detailed breakdown of the 23 variables and their descriptions, please refer to the accompanying form in the appendix.
+
+## 3.2 Data Exploration
+
+### 3.2.1 Data Summary
+
+This part analyzed the baseline characteristics of participants enrolled in the AIDS Clinical Trials Group Study 175. The dataset comprises a diverse range of variables, categorized into continuous and categorical types, each offering insights into the participant profiles and study conditions.
+
+The continuous variables include age, CD4 and CD8 counts at baseline and 20 weeks, duration of pre-treatment antiretroviral therapy, time to failure or censoring, and weight at baseline. Participants ranged in age from 12 to 70 years, with a median age of 34 years. The median CD4 count at baseline was 340, increasing slightly to 353 at 20 weeks. Similarly, CD8 counts showed an increase from a median of 893 at baseline to 865 at 20 weeks. The participants had a varied duration of pre-treatment with antiretroviral therapy, ranging from 0 to 2851 days. The median time to failure or censoring was observed at 997 days. Weight varied widely among participants, with a median of 74.39 kg.
+
+The categorical variables offer insights into treatment types, hemophilia status, sexual orientation, history of IV drug use, Karnofsky score, prior antiretroviral therapy, race, gender, symptomatic indicators, and treatment indicators. Treatment types were evenly distributed among the four categories. A majority of participants did not have hemophilia (1959 out of 2139), were engaged in homosexual/bisexual activities (1414 out of 2139), and had no history of IV drug use (1858 out of 2139). Most participants had a high Karnofsky score of 100. The majority were also not on non-ZDV antiretroviral therapy pre-study and had used ZDV prior to the study. The study population was predominantly male (1771 out of 2139) and white (1522 out of 2139). Regarding antiretroviral history, a significant proportion were experienced in antiretroviral therapy. The majority of participants were asymptomatic, and a large number were on treatments other than ZDV only. The off-treatment indicator before 96±5 weeks showed a larger number not going off treatment, and censoring was more common than failure in the outcome variable.
+
+## 3.3 Life Table
+
+Life tables can provide interval-based summaries of survival data\cite{laj_1}. For each treatment group, we calculated the number at risk, the number of events, and the proportion surviving at each interval. The hazard function was estimated as the ratio of the number of events to the number at risk in each interval. These estimates allowed us to observe the mortality rate's pattern over time and identify any periods with unusually high or low rates.
+
+## 3.4 Non-parametric Survival Estimate
+
+### 3.4.1 Kaplan-Meier estimator
+The Kaplan-Meier estimator is a non-parametric estimation of the survival function, S(t), which represents the probability of surviving past time t\cite{laj_2}. The Kaplan-Meier estimator for the survival function at time \( t \) is given by: \[ \hat{S}(t) = \prod_{i: t_i \leq t} \left(1 - \frac{d_i}{n_i}\right) \] where \( t_i \) are the distinct observed event times, \( d_i \) is the number of events at \( t_i \), and \( n_i \) is the number of individuals at risk just prior to \( t_i \). For each group, the Kaplan-Meier curve was plotted to illustrate the survival experience of participants over the study period. This method allowed us to utilize the full timeline of each participant, taking into account right-censoring, a common assumption where individuals' end of study data may not be due to the event of interest but rather due to loss of follow-up or study termination.
+
+
+### 3.4.2 Nelson-Aalen Estimator
+
+Similar to the Kaplan-Meier estimator, the Nelson-Aalen estimator is another non-parametric approach used in survival analysis. However, while the Kaplan-Meier estimator focuses on estimating the survival function, the Nelson-Aalen estimator is primarily used to estimate the cumulative hazard function, denoted as H(t). 
+
+$$H(t)=\sum_{i:t_i\leq t}\frac{d_i}{n_i}$$
+
+Hence,
+
+$$\hat{S}(t) = \prod_{t_i\leq t} e^{-\frac{d_i}{n_i}}$$
+
+This estimator accommodates right-censored data, making it valuable in studies with incomplete follow-ups.It is worth noting that the Nelson-Aalen estimator generally provides more conservative estimates of the cumulative hazard function compared to the Kaplan-Meier estimator.\cite{lzq_1}\cite{lzq_2}
+
+## 3.5 Non-parametric test
+
+### 3.5.1 Log rank test
+
+Log-rank test is a non-parametric test based on the observed and expected number of events in each group at each observed event time. It provides a test statistic that, under the null hypothesis of no difference between groups, follows a chi-square distribution\cite{laj_3}. The log-rank test is particularly useful as it gives more weight to differences in survival times when more participants are at risk.
+
+Let \( t_1, t_2, \ldots, t_D \) be the distinct event times observed across all groups. At each event time \( t_i \), let \( O_{k,i} \) be the observed number of events in group \( k \), and \( N_{k,i} \) the number of subjects at risk in group \( k \). The total number of events at time \( t_i \) is \( O_i \), and the total number at risk is \( N_i \). The expected number of events for group \( k \) at time \( t_i \) under the null hypothesis is given by:
+\[ E_{k,i} = O_i \frac{N_{k,i}}{N_i} \]
+and the variance of the expected number of events is:
+\[ V_{k,i} = E_{k,i} \left(1 - \frac{E_{k,i}}{N_i} \right) \left( \frac{N_i - N_{k,i}}{N_i - 1} \right) \]
+if \( N_i > 1 \), otherwise \( V_{k,i} = 0 \).
+
+The log-rank test statistic is then calculated as:
+\[ \chi^2 = \sum_{i=1}^{D} \frac{(O_{k,i} - E_{k,i})^2}{V_{k,i}} \]
+which under the null hypothesis approximates a chi-square distribution with \(K-1\) degrees of freedom.
+
+
+
+### 3.5.2 Trend Log Rank Test
+
+The Trend Log Rank Test is an extension of the log-rank test, designed to evaluate survival data across multiple groups, especially when there is an ordinal relationship or trend among the groups. This test is particularly useful in scenarios where the proportional hazards assumption holds true across these groups.
+
+For the Trend Log Rank Test, let's denote \( K \) groups, and for the \( k^{th} \) group, the log-rank statistics can be represented as:
+
+\[ L_k = \sum_{i=1}^{r'_k} (d_{0i} - e_{ki}) \]
+
+where \( d_{0i} \) is the observed number of events and \( e_{ki} \) is the expected number of events under the null hypothesis for the \( i^{th} \) time period in the \( k^{th} \) group.
+
+The variance of \( L_k \) is given by:
+
+\[ \text{var}(L_k) = \sum_{i=1}^{r'_k} \frac{n_{0i}n_{ki}d_{ki}(n_{0ki} - d_{0ki})}{n_{0ki}^2 (n_{0ki} - 1)} \]
+
+where \( n_{0i} \), \( n_{ki} \), \( d_{ki} \), and \( n_{0ki} \) represent the number of subjects at risk, the number of subjects at risk in the \( k^{th} \) group, the number of events in the \( k^{th} \) group, and the total number of subjects at risk at the \( i^{th} \) time point, respectively.
+
+The trend log-rank test statistic, \( LS \), is then calculated as follows:
+
+\[ LS = \left(\frac{\sum_{k=1}^K \omega_k L_k}{\sqrt{\sum_{k=1}^K (\omega_k - \overline{\omega})^2 \text{var}(L_k)}}\right)^2 \]
+
+Here, \( \omega_k \) represents the weight for the \( k^{th} \) group, and \( \overline{\omega} \) is the average weight, calculated as:
+
+\[ \overline{\omega} = \frac{\sum_{k=1}^K \omega_k e_k}{\sum_{k=1}^K e_k} \]
+
+Under the null hypothesis of no trend across the groups, the test statistic \( LS \) follows a chi-square distribution with one degree of freedom (\( \chi_1^2 \)).
+
+### 3.5.3 Weighted Trend Log Rank Family of Test
+
+
+The Weighted Trend Log Rank Test extends the traditional Log Rank Test by incorporating weights into the analysis. This approach enhances the flexibility of the test, allowing it to cater to specific study designs or hypotheses. In this variant, the statistic \( L_{k,w} \) is used, which is defined as \( L_{k,w} = \sum_{i=1}^k \omega_i (d_{0i} - e_{0i}) \). Here, \( \omega_i \) denotes the weight assigned to the \( i^{th} \) event. Different weighting schemes can be applied depending on the study requirements. The choice of weights can significantly affect the sensitivity of the test to early or late differences in survival times. 
+
+Please refer to Table 7 in the appendix for more details.
+
+
+
+## 3.6 Cox Proportional Hazard(PH) Model
+
+In this study, another modeling approach used is Cox PH Model. It is built to perform survival analysis and predict the survival time of patients and predictor variables,  As a semi-parametric model, it makes fewer assumptions about the underlying hazard function compared to fully parametric models. The primary assumption of the CoxPH model is that the hazard ratio is constant over time, which implies that the relative risk of an event remains constant across different time points\cite{lss_1}.
+
+Compared with prior approaches such as the log-rank test, Cox PH model allows analysis that considers multiple factors, the covariates. Final model was chosen based on stepwise approaches including forward, backward, and both. The model with the lowest AIC is selected. Generally, the Cox-PH model has the function as: 
+
+\[ h(t|Z=z) = h_0(t)e^{\beta z} \]
+where \(h_0(t) \) is the baseline hazard function, Z can be a vector of p covariates, \(\beta\) is a vector of p coefficients.
+
+
+## 3.7 Assumptions and Model Checking
+The significant levels of all tests in our analysis are all 0.05. We did not assume proportional hazards given the non-parametric nature of the Kaplan-Meier and log-rank methods. However, we also employed a Cox proportional hazards model which would need to test this assumption mentioned above using diagnostic plots or tests based on Schoenfeld residuals.

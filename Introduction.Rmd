@@ -9,22 +9,26 @@ output:
     theme: journal
 ---
 
-```{css}
+```{css, echo = FALSE}
 .columns {display: flex;}
 ```
 
 
-
+\ \par
 # Motivation
 
 AIDS, or Acquired Immunodeficiency Syndrome, remains a significant global health challenge, with millions affected by HIV[1]. Effective treatment strategies are crucial for improving the quality of life of patients and prolonging survival[2]. Our analysis seeks to leverage this rich dataset to gain insights into factors influencing survival outcomes in AIDS patients and to evaluate the efficacy of different treatment modalities.
 
 Additionally, we think this project will allow us to combine skills learned in this class with skills from all our other classes, especially Biostatistical Methods, Principles of Epidemiology, and Survival Analysis.
 
+
+\ \par
 # Main Questions
 
-* What are some factors contributes to the difference of survival outcomes in AIDS patients?
+* What are the impacts of different treatment strategies in AIDS patients?
 
+
+\ \par
 # Background Information
 
 The first AIDS case in the United States was diagnosed in 1981. Human Immunodefficiency Virus (HIV), the chronic infected virus that damages people's immune system, is been identified in 1984 as the cause that may lead to acquired immunodeficiency syndrome (AIDS). However, researchers believe that long before any confirmed cases, AIDS The virus has already spread across the world. [3] In the year since the emergence of AIDS, the underestimated scale and rapid spread of the disease has significantly challenging the global public health and economic growth. Countless families and communities were devastated worldwide. By the beginning of 21st century, about 56 million people has get HIV infection in total.[4] Presently, approximately 1.2 million individuals aged 13 and older in the United States living with HIV.[5] Faced with the negative social impact of HIV, the current top priority for researchers is to better understand HIV transmission and incidence trends, control the global impact of AIDS, and improve the treatment effects and quality of life of AIDS patients.
@@ -35,19 +39,32 @@ The first AIDS case in the United States was diagnosed in 1981. Human Immunodeff
 
 <center>
 
+<center>
+Image from [AIDSVu](https://map.aidsvu.org/map#)
+<center>
 
+
+\ \par
 # Anticipated Data Sources
 
 The [AIDS Clinical Trials Group Study 175](https://archive.ics.uci.edu/dataset/890/aids+clinical+trials+group+study+175) dataset, available through the UCI Machine Learning Repository. It provides a comprehensive collection of healthcare statistics and categorical information about patients diagnosed with AIDS in the United States. Initially published in 1996, this dataset aims to predict whether a patient died within a specific observation window. Comprising 2139 instances with 23 features, the dataset was created to examine the performance of two distinct AIDS treatments. Key variables include treatment indicators, patient demographics, medical history, and the Karnofsky score, which gauges a patient's overall health and functional status.
 
 
+
+\ \par
 # Reference
 
 [1] Whiteside, A. and D. Wilson, Health and AIDS in 2019 and beyond. Afr J AIDS Res, 2018. 17(4): p. iii-v.
+
 [2] Eisinger, R. W., & Fauci, A. S. (2018). Ending the HIV/AIDS pandemic. Emerging infectious diseases, 24(3), 413.
+
 [3] Fox D. M. (2005). AIDS and the American Health Polity: The History and Prospects of a Crisis of Authority. The Milbank Quarterly, 83(4), 10.1111/j.1468-0009.2005.00432.x. https://doi.org/10.1111/j.1468-0009.2005.00432.x
+
 [4] Piot, P., Bartos, M., Ghys, P. et al. The global impact of HIV/AIDS. Nature 410, 968–973 (2001). https://doi.org/10.1038/35073639
+
 [5] CDC. Diagnoses of HIV infection in the United States and dependent areas, 2021. HIV Surveillance Report 2023;34.
+
+[6] Sullivan PS, Woodyatt C, Koski C, Pembleton E, McGuinness P, Taussig J, Ricca A, Luisi N, Mokotoff E, Benbow N, Castel AD. A data visualization and dissemination resource to support HIV prevention and care at the local level: analysis and uses of the AIDSVu Public Data Resource. Journal of medical Internet research. 2020;22(10):e23173.
 
 
 

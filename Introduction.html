@@ -47,107 +47,6 @@
 
 
 
-<style type="text/css">
-  code {
-    white-space: pre;
-  }
-  .sourceCode {
-    overflow: visible;
-  }
-</style>
-<style type="text/css" data-origin="pandoc">
-pre > code.sourceCode { white-space: pre; position: relative; }
-pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
-pre > code.sourceCode > span:empty { height: 1.2em; }
-.sourceCode { overflow: visible; }
-code.sourceCode > span { color: inherit; text-decoration: inherit; }
-div.sourceCode { margin: 1em 0; }
-pre.sourceCode { margin: 0; }
-@media screen {
-div.sourceCode { overflow: auto; }
-}
-@media print {
-pre > code.sourceCode { white-space: pre-wrap; }
-pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
-}
-pre.numberSource code
-  { counter-reset: source-line 0; }
-pre.numberSource code > span
-  { position: relative; left: -4em; counter-increment: source-line; }
-pre.numberSource code > span > a:first-child::before
-  { content: counter(source-line);
-    position: relative; left: -1em; text-align: right; vertical-align: baseline;
-    border: none; display: inline-block;
-    -webkit-touch-callout: none; -webkit-user-select: none;
-    -khtml-user-select: none; -moz-user-select: none;
-    -ms-user-select: none; user-select: none;
-    padding: 0 4px; width: 4em;
-    color: #aaaaaa;
-  }
-pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa;  padding-left: 4px; }
-div.sourceCode
-  {  background-color: #f8f8f8; }
-@media screen {
-pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
-}
-code span.al { color: #ef2929; } /* Alert */
-code span.an { color: #8f5902; font-weight: bold; font-style: italic; } /* Annotation */
-code span.at { color: #204a87; } /* Attribute */
-code span.bn { color: #0000cf; } /* BaseN */
-code span.cf { color: #204a87; font-weight: bold; } /* ControlFlow */
-code span.ch { color: #4e9a06; } /* Char */
-code span.cn { color: #8f5902; } /* Constant */
-code span.co { color: #8f5902; font-style: italic; } /* Comment */
-code span.cv { color: #8f5902; font-weight: bold; font-style: italic; } /* CommentVar */
-code span.do { color: #8f5902; font-weight: bold; font-style: italic; } /* Documentation */
-code span.dt { color: #204a87; } /* DataType */
-code span.dv { color: #0000cf; } /* DecVal */
-code span.er { color: #a40000; font-weight: bold; } /* Error */
-code span.ex { } /* Extension */
-code span.fl { color: #0000cf; } /* Float */
-code span.fu { color: #204a87; font-weight: bold; } /* Function */
-code span.im { } /* Import */
-code span.in { color: #8f5902; font-weight: bold; font-style: italic; } /* Information */
-code span.kw { color: #204a87; font-weight: bold; } /* Keyword */
-code span.op { color: #ce5c00; font-weight: bold; } /* Operator */
-code span.ot { color: #8f5902; } /* Other */
-code span.pp { color: #8f5902; font-style: italic; } /* Preprocessor */
-code span.sc { color: #ce5c00; font-weight: bold; } /* SpecialChar */
-code span.ss { color: #4e9a06; } /* SpecialString */
-code span.st { color: #4e9a06; } /* String */
-code span.va { color: #000000; } /* Variable */
-code span.vs { color: #4e9a06; } /* VerbatimString */
-code span.wa { color: #8f5902; font-weight: bold; font-style: italic; } /* Warning */
-
-</style>
-<script>
-// apply pandoc div.sourceCode style to pre.sourceCode instead
-(function() {
-  var sheets = document.styleSheets;
-  for (var i = 0; i < sheets.length; i++) {
-    if (sheets[i].ownerNode.dataset["origin"] !== "pandoc") continue;
-    try { var rules = sheets[i].cssRules; } catch (e) { continue; }
-    var j = 0;
-    while (j < rules.length) {
-      var rule = rules[j];
-      // check if there is a div.sourceCode rule
-      if (rule.type !== rule.STYLE_RULE || rule.selectorText !== "div.sourceCode") {
-        j++;
-        continue;
-      }
-      var style = rule.style.cssText;
-      // check if color or background-color is set
-      if (rule.style.color === '' && rule.style.backgroundColor === '') {
-        j++;
-        continue;
-      }
-      // replace div.sourceCode by a pre.sourceCode rule
-      sheets[i].deleteRule(j);
-      sheets[i].insertRule('pre.sourceCode{' + style + '}', j);
-    }
-  }
-})();
-</script>
 
 
 
@@ -414,7 +313,7 @@ div.tocify {
       </ul>
       <ul class="nav navbar-nav navbar-right">
         <li>
-  <a href="Project_plan.html">Project Plan</a>
+  <a href="project_plan.html">Project Plan</a>
 </li>
 <li>
   <a href="Introduction.html">Introduction</a>
@@ -426,16 +325,13 @@ div.tocify {
   <a href="Survival-analysis.html">Survival Analysis</a>
 </li>
 <li>
-  <a href="Modeling.html">Modeling</a>
-</li>
-<li>
-  <a href="Conclusion.html">Conclusion</a>
+  <a href="method.html">Methods</a>
 </li>
 <li>
   <a href="https://mingzhicumc.shinyapps.io/shiny_dashboard_template/">Shiny App</a>
 </li>
 <li>
-  <a href="Project-report.html">Report</a>
+  <a href="Report.html">Report</a>
 </li>
 <li>
   <a href="mailto:rh3195@cumc.columbia.edu?subject=About%20your%20website">
@@ -463,11 +359,10 @@ div.tocify {
 </div>
 
 
-<div class="sourceCode" id="cb1"><pre
-class="sourceCode css"><code class="sourceCode css"><span id="cb1-1"><a href="#cb1-1" tabindex="-1"></a><span class="fu">.columns</span> {<span class="kw">display</span>: <span class="dv">flex</span><span class="op">;</span>}</span></code></pre></div>
 <style type="text/css">
 .columns {display: flex;}
 </style>
+ 
 <div id="motivation" class="section level1">
 <h1>Motivation</h1>
 <p>AIDS, or Acquired Immunodeficiency Syndrome, remains a significant
@@ -481,13 +376,15 @@ modalities.</p>
 learned in this class with skills from all our other classes, especially
 Biostatistical Methods, Principles of Epidemiology, and Survival
 Analysis.</p>
+ 
 </div>
 <div id="main-questions" class="section level1">
 <h1>Main Questions</h1>
 <ul>
-<li>What are some factors contributes to the difference of survival
-outcomes in AIDS patients?</li>
+<li>What are the impacts of different treatment strategies in AIDS
+patients?</li>
 </ul>
+ 
 </div>
 <div id="background-information" class="section level1">
 <h1>Background Information</h1>
@@ -511,6 +408,10 @@ of life of AIDS patients.</p>
 <iframe src="https://map.aidsvu.org/county-frame?datatype=prevalence&amp;ratescases=rates&amp;filters=overall&amp;area=All&amp;basemap=cjjopfjjb03ag2rpnrv3w5k62&amp;year=hidden&amp;countytype=all" width="800" height="500" style="border:2px solid black;">
 </iframe>
 <center>
+<center>
+Image from <a href="https://map.aidsvu.org/map#">AIDSVu</a>
+<center>
+ 
 </div>
 <div id="anticipated-data-sources" class="section level1">
 <h1>Anticipated Data Sources</h1>
@@ -526,22 +427,30 @@ dataset was created to examine the performance of two distinct AIDS
 treatments. Key variables include treatment indicators, patient
 demographics, medical history, and the Karnofsky score, which gauges a
 patient’s overall health and functional status.</p>
+ 
 </div>
 <div id="reference" class="section level1">
 <h1>Reference</h1>
 <p>[1] Whiteside, A. and D. Wilson, Health and AIDS in 2019 and beyond.
-Afr J AIDS Res, 2018. 17(4): p. iii-v. [2] Eisinger, R. W., &amp; Fauci,
-A. S. (2018). Ending the HIV/AIDS pandemic. Emerging infectious
-diseases, 24(3), 413. [3] Fox D. M. (2005). AIDS and the American Health
-Polity: The History and Prospects of a Crisis of Authority. The Milbank
-Quarterly, 83(4), 10.1111/j.1468-0009.2005.00432.x. <a
+Afr J AIDS Res, 2018. 17(4): p. iii-v.</p>
+<p>[2] Eisinger, R. W., &amp; Fauci, A. S. (2018). Ending the HIV/AIDS
+pandemic. Emerging infectious diseases, 24(3), 413.</p>
+<p>[3] Fox D. M. (2005). AIDS and the American Health Polity: The
+History and Prospects of a Crisis of Authority. The Milbank Quarterly,
+83(4), 10.1111/j.1468-0009.2005.00432.x. <a
 href="https://doi.org/10.1111/j.1468-0009.2005.00432.x"
-class="uri">https://doi.org/10.1111/j.1468-0009.2005.00432.x</a> [4]
-Piot, P., Bartos, M., Ghys, P. et al. The global impact of HIV/AIDS.
-Nature 410, 968–973 (2001). <a href="https://doi.org/10.1038/35073639"
-class="uri">https://doi.org/10.1038/35073639</a> [5] CDC. Diagnoses of
-HIV infection in the United States and dependent areas, 2021. HIV
-Surveillance Report 2023;34.</p>
+class="uri">https://doi.org/10.1111/j.1468-0009.2005.00432.x</a></p>
+<p>[4] Piot, P., Bartos, M., Ghys, P. et al. The global impact of
+HIV/AIDS. Nature 410, 968–973 (2001). <a
+href="https://doi.org/10.1038/35073639"
+class="uri">https://doi.org/10.1038/35073639</a></p>
+<p>[5] CDC. Diagnoses of HIV infection in the United States and
+dependent areas, 2021. HIV Surveillance Report 2023;34.</p>
+<p>[6] Sullivan PS, Woodyatt C, Koski C, Pembleton E, McGuinness P,
+Taussig J, Ricca A, Luisi N, Mokotoff E, Benbow N, Castel AD. A data
+visualization and dissemination resource to support HIV prevention and
+care at the local level: analysis and uses of the AIDSVu Public Data
+Resource. Journal of medical Internet research. 2020;22(10):e23173.</p>
 </div>
 
 

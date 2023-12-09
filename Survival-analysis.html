@@ -9,9 +9,11 @@
 <meta http-equiv="X-UA-Compatible" content="IE=EDGE" />
 
 
+<meta name="author" content="Group Work" />
 
+<meta name="date" content="2023-12-09" />
 
-<title>Survival Analysis</title>
+<title>Analysis</title>
 
 <script src="site_libs/header-attrs-2.25/header-attrs.js"></script>
 <script src="site_libs/jquery-3.6.0/jquery-3.6.0.min.js"></script>
@@ -36,8 +38,6 @@
 <script src="site_libs/navigation-1.1/codefolding.js"></script>
 <link href="site_libs/highlightjs-9.12.0/default.css" rel="stylesheet" />
 <script src="site_libs/highlightjs-9.12.0/highlight.js"></script>
-<script src="site_libs/kePrint-0.0.1/kePrint.js"></script>
-<link href="site_libs/lightable-0.0.1/lightable.css" rel="stylesheet" />
 <link href="site_libs/font-awesome-6.4.2/css/all.min.css" rel="stylesheet" />
 <link href="site_libs/font-awesome-6.4.2/css/v4-shims.min.css" rel="stylesheet" />
 
@@ -66,7 +66,6 @@ if (window.hljs) {
 
 
 
-<link rel="stylesheet" href="style.css" type="text/css" />
 
 
 
@@ -331,7 +330,7 @@ div.tocify {
       </ul>
       <ul class="nav navbar-nav navbar-right">
         <li>
-  <a href="Project_plan.html">Project Plan</a>
+  <a href="project_plan.html">Project Plan</a>
 </li>
 <li>
   <a href="Introduction.html">Introduction</a>
@@ -343,16 +342,13 @@ div.tocify {
   <a href="Survival-analysis.html">Survival Analysis</a>
 </li>
 <li>
-  <a href="Modeling.html">Modeling</a>
-</li>
-<li>
-  <a href="Conclusion.html">Conclusion</a>
+  <a href="method.html">Methods</a>
 </li>
 <li>
   <a href="https://mingzhicumc.shinyapps.io/shiny_dashboard_template/">Shiny App</a>
 </li>
 <li>
-  <a href="Project-report.html">Report</a>
+  <a href="Report.html">Report</a>
 </li>
 <li>
   <a href="mailto:rh3195@cumc.columbia.edu?subject=About%20your%20website">
@@ -383,44 +379,427 @@ div.tocify {
 
 
 
-<h1 class="title toc-ignore">Survival Analysis</h1>
+<h1 class="title toc-ignore">Analysis</h1>
+<h4 class="author">Group Work</h4>
+<h4 class="date">2023-12-09</h4>
 
 </div>
 
 
- 
+<div id="introduction" class="section level1">
+<h1>Introduction</h1>
+<p>Acquired Immunodeficiency Syndrome (AIDS) remains a global health
+challenge affecting millions with HIV. The effectiveness of treatments
+is paramount for enhancing patient quality of life and survival. This
+report analyzed the AIDS Clinical Trials Group Study 175 dataset to
+assess diverse treatment efficacy.</p>
+</div>
+<div id="methods" class="section level1">
+<h1>Methods</h1>
+<p>The exploratory data analysis (EDA) identified the baseline
+characteristics, categorizing variables into continuous and categorical
+types. Life tables provided interval-based survival summaries, while
+Kaplan-Meier curves, log-rank tests, and the Cox proportional hazards
+model assessed survival dynamics.</p>
+<pre class="r"><code># Read the data
+# Construct tidied dataset
+data &lt;- read.csv(&quot;aids.csv&quot;) |&gt; 
+  mutate(
+    trt = factor(recode(
+      trt
+      , &#39;0&#39; =&quot;ZDV only&quot;
+      , &#39;1&#39; =&quot;ZDV + ddI&quot;
+      , &#39;2&#39; =&quot;ZDV + Zal&quot;
+      , &#39;3&#39; =&quot;ddI only&quot;
+    ))
+         )</code></pre>
+<p>The Kaplan-Meier estimator is a non-parametric estimation of the
+survival function, S(t), which represents the probability of surviving
+past time t. The Kaplan-Meier estimator for the survival function at
+time <span class="math inline">\(t\)</span> is given by: <span
+class="math display">\[ \hat{S}(t) = \prod_{i: t_i \leq t} \left(1 -
+\frac{d_i}{n_i}\right) \]</span> where <span
+class="math inline">\(t_i\)</span> are the distinct observed event
+times, <span class="math inline">\(d_i\)</span> is the number of events
+at <span class="math inline">\(t_i\)</span>, and <span
+class="math inline">\(n_i\)</span> is the number of individuals at risk
+just prior to <span class="math inline">\(t_i\)</span>. For each group,
+the Kaplan-Meier curve was plotted to illustrate the survival experience
+of participants over the study period. This method allowed us to utilize
+the full timeline of each participant, taking into account
+right-censoring, a common assumption where individuals’ end of study
+data may not be due to the event of interest but rather due to loss of
+follow-up or study termination.</p>
+<p>Similar to the Kaplan-Meier estimator, the Nelson-Aalen estimator is
+another non-parametric approach used in survival analysis. However,
+while the Kaplan-Meier estimator focuses on estimating the survival
+function, the Nelson-Aalen estimator is primarily used to estimate the
+cumulative hazard function, denoted as H(t).</p>
+<p><span class="math display">\[H(t)=\sum_{i:t_i\leq
+t}\frac{d_i}{n_i}\]</span></p>
+<p>Hence,</p>
+<p><span class="math display">\[\hat{S}(t) = \prod_{t_i\leq t}
+e^{-\frac{d_i}{n_i}}\]</span></p>
+<p>This estimator accommodates right-censored data, making it valuable
+in studies with incomplete follow-ups.It is worth noting that the
+Nelson-Aalen estimator generally provides more conservative estimates of
+the cumulative hazard function compared to the Kaplan-Meier
+estimator.</p>
+<pre class="r"><code>km_fit &lt;- survfit(Surv(time, cid) ~ trt, data)
+km_plot = km_fit |&gt; autoplot() +
+  labs(x = &quot;Time (Days)&quot;, y = &quot;Estimated Survival Probability&quot;,
+       title = &quot;(a) Kaplan-Meier Survival Estimate&quot;) +
+  theme_bw() 
+
+
+data$trt &lt;- factor(data$trt, labels = c(&quot;ZDV only&quot;, &quot;ZDV + ddI&quot;, &quot;ZDV + Zal&quot;, &quot;ddI only&quot;))
+fh_fit &lt;- survfit(Surv(time, cid) ~ trt, data, type = &quot;fh&quot;)
+fh_plot = fh_fit %&gt;% autoplot() +
+labs(x = &quot;Time (Days)&quot;, y = &quot;Estimated Survival Probability&quot;,
+title = &quot;(b) Nelson-Aalen Survival Estimate&quot;) + theme_bw()
+
+grid.arrange(km_plot, fh_plot, ncol = 1)</code></pre>
+<p><img src="survival-analysis_files/figure-html/unnamed-chunk-2-1.png" width="1200" style="display: block; margin: auto;" /></p>
+<div id="create-life-table-stratified-by-trt" class="section level2">
+<h2>Create life-table stratified by trt</h2>
+<p>Life tables can provide interval-based summaries of survival data.
+For each treatment group, we calculated the number at risk, the number
+of events, and the proportion surviving at each interval. The hazard
+function was estimated as the ratio of the number of events to the
+number at risk in each interval. These estimates allowed us to observe
+the mortality rate’s pattern over time and identify any periods with
+unusually high or low rates. Here, we just show one of the plot we
+made.</p>
+<pre class="r"><code>lifetab_0 &lt;- lifetab2(Surv(time, cid) ~ 1, data[data$trt == &quot;ZDV only&quot;,], breaks = seq(0, 1300, by = 100))
+# Show the life table information of different trt
+kbl(lifetab_0, &quot;simple&quot;, digits = 3)</code></pre>
+<table>
+<thead>
+<tr class="header">
+<th></th>
+<th align="right">tstart</th>
+<th align="right">tstop</th>
+<th align="right">nsubs</th>
+<th align="right">nlost</th>
+<th align="right">nrisk</th>
+<th align="right">nevent</th>
+<th align="right">surv</th>
+<th align="right">pdf</th>
+<th align="right">hazard</th>
+<th align="right">se.surv</th>
+<th align="right">se.pdf</th>
+<th align="right">se.hazard</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>0-100</td>
+<td align="right">0</td>
+<td align="right">100</td>
+<td align="right">561</td>
+<td align="right">1</td>
+<td align="right">560.5</td>
+<td align="right">1</td>
+<td align="right">1.000</td>
+<td align="right">0</td>
+<td align="right">0.000</td>
+<td align="right">0.000</td>
+<td align="right">0</td>
+<td align="right">0</td>
+</tr>
+<tr class="even">
+<td>100-200</td>
+<td align="right">100</td>
+<td align="right">200</td>
+<td align="right">559</td>
+<td align="right">7</td>
+<td align="right">555.5</td>
+<td align="right">5</td>
+<td align="right">0.998</td>
+<td align="right">0</td>
+<td align="right">0.000</td>
+<td align="right">0.002</td>
+<td align="right">0</td>
+<td align="right">0</td>
+</tr>
+<tr class="odd">
+<td>200-300</td>
+<td align="right">200</td>
+<td align="right">300</td>
+<td align="right">547</td>
+<td align="right">2</td>
+<td align="right">546.0</td>
+<td align="right">11</td>
+<td align="right">0.989</td>
+<td align="right">0</td>
+<td align="right">0.000</td>
+<td align="right">0.004</td>
+<td align="right">0</td>
+<td align="right">0</td>
+</tr>
+<tr class="even">
+<td>300-400</td>
+<td align="right">300</td>
+<td align="right">400</td>
+<td align="right">534</td>
+<td align="right">15</td>
+<td align="right">526.5</td>
+<td align="right">18</td>
+<td align="right">0.969</td>
+<td align="right">0</td>
+<td align="right">0.000</td>
+<td align="right">0.007</td>
+<td align="right">0</td>
+<td align="right">0</td>
+</tr>
+<tr class="odd">
+<td>400-500</td>
+<td align="right">400</td>
+<td align="right">500</td>
+<td align="right">501</td>
+<td align="right">8</td>
+<td align="right">497.0</td>
+<td align="right">18</td>
+<td align="right">0.936</td>
+<td align="right">0</td>
+<td align="right">0.000</td>
+<td align="right">0.010</td>
+<td align="right">0</td>
+<td align="right">0</td>
+</tr>
+<tr class="even">
+<td>500-600</td>
+<td align="right">500</td>
+<td align="right">600</td>
+<td align="right">475</td>
+<td align="right">9</td>
+<td align="right">470.5</td>
+<td align="right">11</td>
+<td align="right">0.902</td>
+<td align="right">0</td>
+<td align="right">0.000</td>
+<td align="right">0.013</td>
+<td align="right">0</td>
+<td align="right">0</td>
+</tr>
+<tr class="odd">
+<td>600-700</td>
+<td align="right">600</td>
+<td align="right">700</td>
+<td align="right">455</td>
+<td align="right">6</td>
+<td align="right">452.0</td>
+<td align="right">17</td>
+<td align="right">0.881</td>
+<td align="right">0</td>
+<td align="right">0.000</td>
+<td align="right">0.014</td>
+<td align="right">0</td>
+<td align="right">0</td>
+</tr>
+<tr class="even">
+<td>700-800</td>
+<td align="right">700</td>
+<td align="right">800</td>
+<td align="right">432</td>
+<td align="right">8</td>
+<td align="right">428.0</td>
+<td align="right">11</td>
+<td align="right">0.848</td>
+<td align="right">0</td>
+<td align="right">0.000</td>
+<td align="right">0.016</td>
+<td align="right">0</td>
+<td align="right">0</td>
+</tr>
+<tr class="odd">
+<td>800-900</td>
+<td align="right">800</td>
+<td align="right">900</td>
+<td align="right">413</td>
+<td align="right">11</td>
+<td align="right">407.5</td>
+<td align="right">14</td>
+<td align="right">0.826</td>
+<td align="right">0</td>
+<td align="right">0.000</td>
+<td align="right">0.017</td>
+<td align="right">0</td>
+<td align="right">0</td>
+</tr>
+<tr class="even">
+<td>900-1000</td>
+<td align="right">900</td>
+<td align="right">1000</td>
+<td align="right">388</td>
+<td align="right">88</td>
+<td align="right">344.0</td>
+<td align="right">18</td>
+<td align="right">0.798</td>
+<td align="right">0</td>
+<td align="right">0.001</td>
+<td align="right">0.018</td>
+<td align="right">0</td>
+<td align="right">0</td>
+</tr>
+<tr class="odd">
+<td>1000-1100</td>
+<td align="right">1000</td>
+<td align="right">1100</td>
+<td align="right">282</td>
+<td align="right">155</td>
+<td align="right">204.5</td>
+<td align="right">4</td>
+<td align="right">0.756</td>
+<td align="right">0</td>
+<td align="right">0.000</td>
+<td align="right">0.019</td>
+<td align="right">0</td>
+<td align="right">0</td>
+</tr>
+<tr class="even">
+<td>1100-1200</td>
+<td align="right">1100</td>
+<td align="right">1200</td>
+<td align="right">123</td>
+<td align="right">115</td>
+<td align="right">65.5</td>
+<td align="right">0</td>
+<td align="right">0.741</td>
+<td align="right">0</td>
+<td align="right">0.000</td>
+<td align="right">0.020</td>
+<td align="right">NaN</td>
+<td align="right">NaN</td>
+</tr>
+<tr class="odd">
+<td>1200-1300</td>
+<td align="right">1200</td>
+<td align="right">1300</td>
+<td align="right">8</td>
+<td align="right">8</td>
+<td align="right">4.0</td>
+<td align="right">0</td>
+<td align="right">0.741</td>
+<td align="right">0</td>
+<td align="right">0.000</td>
+<td align="right">0.020</td>
+<td align="right">NaN</td>
+<td align="right">NaN</td>
+</tr>
+<tr class="even">
+<td>1300-Inf</td>
+<td align="right">1300</td>
+<td align="right">Inf</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">0.0</td>
+<td align="right">0</td>
+<td align="right">0.741</td>
+<td align="right">NA</td>
+<td align="right">NA</td>
+<td align="right">0.020</td>
+<td align="right">NA</td>
+<td align="right">NA</td>
+</tr>
+</tbody>
+</table>
+<div id="plot-the-hazard-ratio-by-trt-based-on-life-table-estimate"
+class="section level3">
+<h3>Plot the hazard ratio by trt based on life table estimate</h3>
+<pre class="r"><code># tx group 0
+lifetab_0 %&gt;%
+mutate(time = tstart + (tstop - tstart)/2) %&gt;%
+ggplot(aes(x = time, y = hazard)) +
+geom_point() + geom_line() + theme_bw() +
+labs(x = &quot;Time (Days)&quot;, y = &quot;Hazard Rate&quot;,
+title = &quot;Hazard Function for Treatment Group 0 based on life-table estimate&quot;)</code></pre>
+<p><img src="survival-analysis_files/figure-html/unnamed-chunk-4-1.png" width="1200" style="display: block; margin: auto;" /></p>
+</div>
+</div>
+<div id="log-rank-score-test" class="section level2">
+<h2>Log rank score test</h2>
+<div id="log-rank-score-test-of-trt" class="section level3">
+<h3>Log rank score test of trt</h3>
+<p>This variable has four levels, and the test is performed across these
+four treatment groups. The log-rank test results in a Chi-squared value
+of 49.2 with 3 degrees of freedom and a p-value of 1e-10. This is highly
+significant, indicating that there are significant differences in
+survival among the four treatment groups.</p>
+<pre class="r"><code># Ensure &#39;trt&#39; is a factor
+data$trt &lt;- as.factor(data$trt)
+
+# Create the survival object
+surv_obj &lt;- Surv(data$time, data$cid)
+
+# Perform the log-rank test across multiple trt groups
+log_rank_test_trt &lt;- survdiff(surv_obj ~ trt, data = data)</code></pre>
+</div>
+<div id="log-rank-score-test-of-drugs" class="section level3">
+<h3>log rank score test of drugs</h3>
+<p><strong>p-value=0.06: </strong></p>
+<p>In this case, with a p-value of 0.06, the result is not statistically
+significant at the 0.05 level, meaning there is not enough evidence to
+conclude that the survival experiences of the two groups (those with and
+without a history of intravenous drug use) are different. However, the
+p-value is close to the threshold, suggesting that there might be a
+trend worth exploring with a larger sample size or additional
+research.</p>
+<pre class="r"><code># Ensure &#39;drugs&#39; is a factor if it&#39;s not already
+data$drugs &lt;- as.factor(data$drugs)
+
+# Create the survival object
+surv_obj &lt;- Surv(data$time, data$cid)
+
+# Perform the log-rank test
+log_rank_test_drugs &lt;- survdiff(surv_obj ~ drugs, data = data)</code></pre>
+</div>
+<div id="log-rank-score-test-of-genders" class="section level3">
+<h3>log rank score test of genders</h3>
+<p><strong>p-value=0.09: </strong></p>
+<p>In this case, with a p-value of 0.09, the result is not statistically
+significant at the 0.09 level, meaning there is not enough evidence to
+conclude that the survival experiences of male and female groups are
+different. However, the p-value is close to the threshold, suggesting
+that there might be a trend worth exploring with a larger sample size or
+additional research.</p>
+<pre class="r"><code># Ensure &#39;gender&#39; is a factor if it&#39;s not already
+data$gender &lt;- as.factor(data$gender)
+
+# Create the survival object
+surv_obj &lt;- Surv(data$time, data$cid)
+
+# Perform the log-rank test
+log_rank_test_gender &lt;- survdiff(surv_obj ~ gender, data = data)</code></pre>
+</div>
+<div id="log-rank-score-test-of-homo" class="section level3">
+<h3>log rank score test of homo</h3>
+<p><strong>p-value=0.06: </strong></p>
+<p>In this case, with a p-value of 0.06, the result is not statistically
+significant at the 0.05 level, meaning there is not enough evidence to
+conclude that the survival experiences of the two groups (those with and
+without a history of intravenous drug use) are different. However, the
+p-value is close to the threshold, suggesting that there might be a
+trend worth exploring with a larger sample size or additional
+research.</p>
+<pre class="r"><code># Ensure &#39;homo&#39; is a factor
+data$homo &lt;- as.factor(data$homo)
+
+# Create the survival object
+surv_obj &lt;- Surv(data$time, data$cid)
+
+# Perform the log-rank test
+log_rank_test_homo &lt;- survdiff(surv_obj ~ homo, data = data)</code></pre>
+</div>
+</div>
+</div>
 <div id="model-selection-with-tests" class="section level1">
 <h1>Model selection with tests</h1>
-<pre class="r"><code>summary(stepwise) </code></pre>
-<pre><code>Call:
-coxph(formula = Surv(time, cid) ~ preanti + symptom + treat + 
-    offtrt + cd420 + cd820, data = data)
-
-  n= 2139, number of events= 521 
-
-              coef  exp(coef)   se(coef)       z Pr(&gt;|z|)    
-preanti  3.354e-04  1.000e+00  9.130e-05   3.674 0.000239 ***
-symptom  3.609e-01  1.435e+00  1.011e-01   3.570 0.000357 ***
-treat   -4.872e-01  6.143e-01  9.253e-02  -5.266 1.40e-07 ***
-offtrt   4.502e-01  1.569e+00  9.097e-02   4.948 7.48e-07 ***
-cd420   -7.403e-03  9.926e-01  4.578e-04 -16.172  &lt; 2e-16 ***
-cd820    4.689e-04  1.000e+00  9.449e-05   4.963 6.94e-07 ***
----
-Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1
-
-        exp(coef) exp(-coef) lower .95 upper .95
-preanti    1.0003     0.9997    1.0002    1.0005
-symptom    1.4346     0.6971    1.1767    1.7490
-treat      0.6143     1.6278    0.5124    0.7365
-offtrt     1.5686     0.6375    1.3124    1.8747
-cd420      0.9926     1.0074    0.9917    0.9935
-cd820      1.0005     0.9995    1.0003    1.0007
-
-Concordance= 0.766  (se = 0.01 )
-Likelihood ratio test= 485.6  on 6 df,   p=&lt;2e-16
-Wald test            = 411.6  on 6 df,   p=&lt;2e-16
-Score (logrank) test = 425.9  on 6 df,   p=&lt;2e-16</code></pre>
-<pre class="r"><code>broom::tidy(stepwise) |&gt;kbl()</code></pre>
+<pre class="r"><code>fit1&lt;-coxph(Surv(time, cid) ~ . , data = data)
+stepwise1 &lt;- stepAIC(fit1, direction = &quot;both&quot;,trace = F) # BIC
+stepwise1|&gt;
+  broom::tidy()|&gt; 
+  knitr::kable(digits = 3)</code></pre>
 <table>
 <thead>
 <tr>
@@ -444,19 +823,155 @@ p.value
 <tbody>
 <tr>
 <td style="text-align:left;">
+trt1
+</td>
+<td style="text-align:right;">
+-0.442
+</td>
+<td style="text-align:right;">
+0.125
+</td>
+<td style="text-align:right;">
+-3.543
+</td>
+<td style="text-align:right;">
+0.000
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+trt2
+</td>
+<td style="text-align:right;">
+-0.502
+</td>
+<td style="text-align:right;">
+0.122
+</td>
+<td style="text-align:right;">
+-4.112
+</td>
+<td style="text-align:right;">
+0.000
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+trt3
+</td>
+<td style="text-align:right;">
+-0.416
+</td>
+<td style="text-align:right;">
+0.117
+</td>
+<td style="text-align:right;">
+-3.565
+</td>
+<td style="text-align:right;">
+0.000
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+age
+</td>
+<td style="text-align:right;">
+0.011
+</td>
+<td style="text-align:right;">
+0.005
+</td>
+<td style="text-align:right;">
+2.155
+</td>
+<td style="text-align:right;">
+0.031
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+drugs
+</td>
+<td style="text-align:right;">
+-0.327
+</td>
+<td style="text-align:right;">
+0.147
+</td>
+<td style="text-align:right;">
+-2.217
+</td>
+<td style="text-align:right;">
+0.027
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+karnof
+</td>
+<td style="text-align:right;">
+-0.014
+</td>
+<td style="text-align:right;">
+0.007
+</td>
+<td style="text-align:right;">
+-1.977
+</td>
+<td style="text-align:right;">
+0.048
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+z30
+</td>
+<td style="text-align:right;">
+0.225
+</td>
+<td style="text-align:right;">
+0.159
+</td>
+<td style="text-align:right;">
+1.418
+</td>
+<td style="text-align:right;">
+0.156
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
 preanti
 </td>
 <td style="text-align:right;">
-0.0003354
+0.000
 </td>
 <td style="text-align:right;">
-0.0000913
+0.000
 </td>
 <td style="text-align:right;">
-3.673646
+3.351
 </td>
 <td style="text-align:right;">
-0.0002391
+0.001
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+strat
+</td>
+<td style="text-align:right;">
+-0.238
+</td>
+<td style="text-align:right;">
+0.114
+</td>
+<td style="text-align:right;">
+-2.083
+</td>
+<td style="text-align:right;">
+0.037
 </td>
 </tr>
 <tr>
@@ -464,33 +979,16 @@ preanti
 symptom
 </td>
 <td style="text-align:right;">
-0.3608808
+0.368
 </td>
 <td style="text-align:right;">
-0.1010939
+0.103
 </td>
 <td style="text-align:right;">
-3.569759
+3.567
 </td>
 <td style="text-align:right;">
-0.0003573
-</td>
-</tr>
-<tr>
-<td style="text-align:left;">
-treat
-</td>
-<td style="text-align:right;">
--0.4872220
-</td>
-<td style="text-align:right;">
-0.0925251
-</td>
-<td style="text-align:right;">
--5.265835
-</td>
-<td style="text-align:right;">
-0.0000001
+0.000
 </td>
 </tr>
 <tr>
@@ -498,16 +996,33 @@ treat
 offtrt
 </td>
 <td style="text-align:right;">
-0.4501628
+0.468
 </td>
 <td style="text-align:right;">
-0.0909720
+0.093
 </td>
 <td style="text-align:right;">
-4.948366
+5.027
 </td>
 <td style="text-align:right;">
-0.0000007
+0.000
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+cd40
+</td>
+<td style="text-align:right;">
+0.001
+</td>
+<td style="text-align:right;">
+0.001
+</td>
+<td style="text-align:right;">
+2.884
+</td>
+<td style="text-align:right;">
+0.004
 </td>
 </tr>
 <tr>
@@ -515,16 +1030,16 @@ offtrt
 cd420
 </td>
 <td style="text-align:right;">
--0.0074031
+-0.008
 </td>
 <td style="text-align:right;">
-0.0004578
+0.001
 </td>
 <td style="text-align:right;">
--16.172233
+-14.972
 </td>
 <td style="text-align:right;">
-0.0000000
+0.000
 </td>
 </tr>
 <tr>
@@ -532,25 +1047,24 @@ cd420
 cd820
 </td>
 <td style="text-align:right;">
-0.0004689
+0.000
 </td>
 <td style="text-align:right;">
-0.0000945
+0.000
 </td>
 <td style="text-align:right;">
-4.962948
+4.909
 </td>
 <td style="text-align:right;">
-0.0000007
+0.000
 </td>
 </tr>
 </tbody>
 </table>
-<blockquote>
+<pre class="r"><code>fit2 &lt;- coxph(Surv(time,cid)~trt+preanti+karnof+age+drugs+symptom+offtrt+cd40+cd420+ cd820,data=data)</code></pre>
 <p>Our goal is to investigate the difference between two groups of
-different treatments(ZDV), therefore we pre-specified to stratify by
+different treatments, therefore we pre-specified to stratify by
 treatment in the model.</p>
-</blockquote>
 </div>
 <div id="graphical-methods" class="section level1">
 <h1>Graphical Methods</h1>
@@ -565,44 +1079,53 @@ under proportionality assumption.</p>
 <pre class="r"><code>library(ggfortify)
 library(StepReg)
 data_fit &lt;- data |&gt;
-  dplyr::select(time, cid, treat, preanti, symptom, offtrt, cd420, cd820) |&gt;
-  mutate_at(c(3, 5, 6), .funs = ~as.factor(.))
+  dplyr::select(time, cid, trt, preanti, symptom, offtrt, cd420, cd820, karnof, age, drugs, cd40) |&gt;
+  mutate_at(c(3, 5, 6, 11), .funs = ~as.factor(.))
 
 
 # --- treat ---
 # km plot
-fit_km_treat &lt;- survfit(Surv(time, cid) ~ treat, data_fit)
+fit_km_treat &lt;- survfit(Surv(time, cid) ~ trt, data_fit)
 autoplot(fit_km_treat) + theme_bw() +
   labs(x = &quot;Time (days)&quot;, y = &quot;Survival Function&quot;,
        title = &quot;Kaplan-Meier Survival Estimate&quot;)</code></pre>
-<p><img src="Survival-analysis_files/figure-html/unnamed-chunk-2-1.png" width="1200" style="display: block; margin: auto;" /></p>
+<p><img src="survival-analysis_files/figure-html/unnamed-chunk-10-1.png" width="1200" style="display: block; margin: auto;" /></p>
 <pre class="r"><code># loglog vs. log time
 # png(&quot;ph_checking_1.png&quot;, width = 500, height = 400)
-plot(fit_km_treat, fun = &quot;cloglog&quot;, col = c(&quot;black&quot;, &quot;red&quot;),
+plot(fit_km_treat, fun = &quot;cloglog&quot;, col = c(&quot;black&quot;, &quot;red&quot;,&quot;pink&quot;,&quot;blue&quot;),
      xlab = &quot;Time (days in log scale)&quot;, ylab = &quot;log{-log(S(t))}&quot;,
      main = &quot;Log of Negative Log of Estimated Survival Functions&quot;)
-legend(&quot;topleft&quot;, legend = c(&quot;ZDV only&quot;, &quot;Others&quot;), col = c(&quot;black&quot;, &quot;red&quot;), 
+legend(&quot;topleft&quot;, legend = c(&quot;ZDV only&quot;, &quot;ZDV+ddl&quot;, &quot;ZDV+Zal&quot;, &quot;ddl only&quot;), col = c(&quot;black&quot;, &quot;red&quot;,&quot;pink&quot;,&quot;blue&quot;), 
        lty = 1, cex = 1)</code></pre>
-<p><img src="Survival-analysis_files/figure-html/unnamed-chunk-2-2.png" width="1200" style="display: block; margin: auto;" /></p>
+<p><img src="survival-analysis_files/figure-html/unnamed-chunk-10-2.png" width="1200" style="display: block; margin: auto;" /></p>
 <pre class="r"><code># observed vs. fitted
-fit_ph_treat &lt;- coxph(Surv(time, cid) ~ treat, data_fit)
+fit_ph_treat &lt;- coxph(Surv(time, cid) ~ trt, data_fit)
+
 
 # png(&quot;ph_checking_2.png&quot;, width = 500, height = 400)
-plot(fit_km_treat, col = c(&quot;blue&quot;, &quot;darkgreen&quot;),
+plot(fit_km_treat, col = c(&quot;blue&quot;, &quot;darkgreen&quot;, &quot;red&quot;,&quot;pink&quot;),
      xlab = &quot;Time (days)&quot;, ylab = &quot;Survival Function&quot;,
      ylim = c(0.4,1),
      main = &quot;Observed vs. Fitted&quot;)
-lines(survfit(fit_ph_treat, newdata = data.frame(treat = as.factor(0))), # 0
-      col = &quot;red&quot;, conf.int = FALSE)
-lines(survfit(fit_ph_treat, newdata = data.frame(treat = as.factor(1))), # 1
+lines(survfit(fit_ph_treat, newdata = data.frame(trt = as.factor(0))), # 0
+      col = &quot;purple&quot;, conf.int = FALSE)
+lines(survfit(fit_ph_treat, newdata = data.frame(trt = as.factor(1))), # 1
       col = &quot;black&quot;, conf.int = FALSE)
-legend(&quot;bottomleft&quot;, legend = c(&quot;Observed Male&quot;, &quot;Observed Female&quot;,
-                                &quot;Fitted Male&quot;, &quot;Fitted Female&quot;), 
-       col = c(&quot;blue&quot;, &quot;darkgreen&quot;, &quot;red&quot;, &quot;black&quot;), lty = 1, cex = 1, lwd = 2)</code></pre>
-<p><img src="Survival-analysis_files/figure-html/unnamed-chunk-2-3.png" width="1200" style="display: block; margin: auto;" /></p>
+lines(survfit(fit_ph_treat, newdata = data.frame(trt = as.factor(2))), # 2
+      col = &quot;yellow&quot;, conf.int = FALSE)
+lines(survfit(fit_ph_treat, newdata = data.frame(trt = as.factor(3))), # 3
+      col = &quot;orange&quot;, conf.int = FALSE)
+legend(&quot;bottomleft&quot;, legend = c(&quot;Observed ZDV only&quot;, &quot;Observed ZDV+ddl&quot;,
+                                &quot;Observed ZDV+Zal&quot;, &quot;Observed ddl only&quot;,
+                                &quot;Fitted ZDV only&quot;, &quot;Fitted ZDV+ddl&quot;,
+                                &quot;Fitted ZDV+Zal&quot;, &quot;Fitted ddl only&quot;), 
+       col = c(&quot;blue&quot;, &quot;darkgreen&quot;, &quot;red&quot;,&quot;pink&quot;,
+               &quot;purple&quot;, &quot;black&quot;, &quot;yellow&quot;, &quot;orange&quot;), lty = 1, cex = 0.6, lwd = 2,
+       inset=c(0.05, 0), title=&quot;trt&quot;, xpd = TRUE)</code></pre>
+<p><img src="survival-analysis_files/figure-html/unnamed-chunk-10-3.png" width="1200" style="display: block; margin: auto;" /></p>
 <p><strong>Interpretation:</strong> The above two figures demonstrate
 the proportional hazards assumption is hold given there is only one
-indicator variable <code>treat</code> in the model.</p>
+indicator variable <code>trt</code> in the model.</p>
 <ul>
 <li>The above methods work only for categorical variable, the slope in
 plots of residuals such as Schoenfeld vs. time can be used instead for
@@ -611,109 +1134,214 @@ continuous cases.</li>
 <div id="model-checking-ii" class="section level2">
 <h2>Model checking II</h2>
 <p>But first, let’s use the same covariates as above, plus the
-corresponding interaction terms s.t., **covariate*time**. Results are
-shown as follows.</p>
+corresponding interaction terms s.t., <strong><span
+class="math inline">\(covariate \times time\)</span></strong>. Results
+are shown as follows.</p>
 <div id="interaction-test" class="section level3">
 <h3>Interaction test</h3>
 <pre class="r"><code>library(survminer)
 # --- to be updated ---
 
-# interaction
-aids_interaction_fit &lt;- coxph(Surv(time, cid == 1) ~ treat+ preanti+ symptom+ offtrt + cd420+ cd820+ log(time):treat+log(time):preanti+log(time):symptom+log(time):offtrt + log(time):cd420+log(time):cd820, data_fit)
+data_fit &lt;- data |&gt;
+  dplyr::select(time, cid, trt, preanti, symptom, offtrt, cd420, cd820, karnof, age, drugs, cd40) |&gt;
+  mutate_at(c(3, 5, 6, 11), .funs = ~as.factor(.))</code></pre>
+<pre class="r"><code>aids_fit &lt;- coxph(Surv(time, cid == 1) ~ trt+ preanti+ symptom+ offtrt + cd420+ cd820 + karnof+ age+drugs+cd40, data_fit)
+
+cox.zph(aids_fit)</code></pre>
+<pre><code>         chisq df       p
+trt      7.355  3 0.06140
+preanti  0.137  1 0.71101
+symptom  0.689  1 0.40636
+offtrt  17.437  1 3.0e-05
+cd420   75.515  1 &lt; 2e-16
+cd820    0.255  1 0.61385
+karnof   0.488  1 0.48477
+age      1.176  1 0.27809
+drugs    0.632  1 0.42658
+cd40    12.240  1 0.00047
+GLOBAL  96.034 12 3.3e-15</code></pre>
+<pre class="r"><code># interaction
+aids_interaction_fit &lt;- coxph(Surv(time, cid == 1) ~ trt+ preanti+ symptom+ offtrt + cd420+ cd820 + karnof+ age+drugs+cd40+tt(cd40)+ tt(cd420), data_fit, tt = function(x, t, ...) x*t)
 
 summary(aids_interaction_fit)$coefficients |&gt;
-  kable(&quot;latex&quot;, 
+  kable(&quot;simple&quot;, 
         digits = 4, 
         escape = F, 
         booktabs = T, 
 caption = &quot;Regresion Coefficients Estimates of the Cox Model with Time Interactions&quot;) |&gt;
   kable_styling(position = &quot;center&quot;, 
                 latex_options = &quot;hold_position&quot;)</code></pre>
-<p>From the regression summary above, we can see that except
-<code>cd820:log(time)</code>, all the selected variable has a
-significant effect and interaction with time.</p>
+<table>
+<caption>Regresion Coefficients Estimates of the Cox Model with Time
+Interactions</caption>
+<thead>
+<tr class="header">
+<th></th>
+<th align="right">coef</th>
+<th align="right">exp(coef)</th>
+<th align="right">se(coef)</th>
+<th align="right">z</th>
+<th align="right">Pr(&gt;|z|)</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>trt1</td>
+<td align="right">-0.4417</td>
+<td align="right">0.6430</td>
+<td align="right">0.1248</td>
+<td align="right">-3.5384</td>
+<td align="right">0.0004</td>
+</tr>
+<tr class="even">
+<td>trt2</td>
+<td align="right">-0.4790</td>
+<td align="right">0.6194</td>
+<td align="right">0.1221</td>
+<td align="right">-3.9231</td>
+<td align="right">0.0001</td>
+</tr>
+<tr class="odd">
+<td>trt3</td>
+<td align="right">-0.4050</td>
+<td align="right">0.6670</td>
+<td align="right">0.1167</td>
+<td align="right">-3.4698</td>
+<td align="right">0.0005</td>
+</tr>
+<tr class="even">
+<td>preanti</td>
+<td align="right">0.0003</td>
+<td align="right">1.0003</td>
+<td align="right">0.0001</td>
+<td align="right">2.9591</td>
+<td align="right">0.0031</td>
+</tr>
+<tr class="odd">
+<td>symptom1</td>
+<td align="right">0.3187</td>
+<td align="right">1.3753</td>
+<td align="right">0.1031</td>
+<td align="right">3.0916</td>
+<td align="right">0.0020</td>
+</tr>
+<tr class="even">
+<td>offtrt1</td>
+<td align="right">0.4646</td>
+<td align="right">1.5914</td>
+<td align="right">0.0941</td>
+<td align="right">4.9365</td>
+<td align="right">0.0000</td>
+</tr>
+<tr class="odd">
+<td>cd420</td>
+<td align="right">-0.0184</td>
+<td align="right">0.9817</td>
+<td align="right">0.0014</td>
+<td align="right">-13.4954</td>
+<td align="right">0.0000</td>
+</tr>
+<tr class="even">
+<td>cd820</td>
+<td align="right">0.0005</td>
+<td align="right">1.0005</td>
+<td align="right">0.0001</td>
+<td align="right">4.9604</td>
+<td align="right">0.0000</td>
+</tr>
+<tr class="odd">
+<td>karnof</td>
+<td align="right">-0.0126</td>
+<td align="right">0.9875</td>
+<td align="right">0.0071</td>
+<td align="right">-1.7717</td>
+<td align="right">0.0764</td>
+</tr>
+<tr class="even">
+<td>age</td>
+<td align="right">0.0116</td>
+<td align="right">1.0117</td>
+<td align="right">0.0051</td>
+<td align="right">2.2818</td>
+<td align="right">0.0225</td>
+</tr>
+<tr class="odd">
+<td>drugs1</td>
+<td align="right">-0.3248</td>
+<td align="right">0.7227</td>
+<td align="right">0.1471</td>
+<td align="right">-2.2080</td>
+<td align="right">0.0272</td>
+</tr>
+<tr class="even">
+<td>cd40</td>
+<td align="right">0.0033</td>
+<td align="right">1.0033</td>
+<td align="right">0.0012</td>
+<td align="right">2.8246</td>
+<td align="right">0.0047</td>
+</tr>
+<tr class="odd">
+<td>tt(cd40)</td>
+<td align="right">0.0000</td>
+<td align="right">1.0000</td>
+<td align="right">0.0000</td>
+<td align="right">-1.7160</td>
+<td align="right">0.0862</td>
+</tr>
+<tr class="even">
+<td>tt(cd420)</td>
+<td align="right">0.0000</td>
+<td align="right">1.0000</td>
+<td align="right">0.0000</td>
+<td align="right">8.4999</td>
+<td align="right">0.0000</td>
+</tr>
+</tbody>
+</table>
+<p>From the regression summary above, we can see that all the selected
+variable has a significant effect and interaction with time.</p>
+<pre class="r"><code>sjPlot::plot_models(aids_fit,aids_interaction_fit, show.values=T, grid=T, value.size = 2.5, m.labels = c(&quot;Original Cox&quot;, &quot;Time-varying Cox&quot;))</code></pre>
+<p><img src="survival-analysis_files/figure-html/unnamed-chunk-14-1.png" width="1200" style="display: block; margin: auto;" /></p>
 <pre class="r"><code>aids_fit&lt;-coxph(Surv(time, cid) ~ ., data_fit)
 # residual
 ggcoxzph(cox.zph(aids_fit), var = c(&quot;cd420&quot;), df = 2, nsmo = 1000)</code></pre>
-<p><img src="Survival-analysis_files/figure-html/unnamed-chunk-4-1.png" width="1200" style="display: block; margin: auto;" /></p>
+<p><img src="survival-analysis_files/figure-html/unnamed-chunk-15-1.png" width="1200" style="display: block; margin: auto;" /></p>
+<pre class="r"><code>ggcoxzph(cox.zph(aids_fit), var = c(&quot;cd40&quot;), df = 2, nsmo = 1000)</code></pre>
+<p><img src="survival-analysis_files/figure-html/unnamed-chunk-15-2.png" width="1200" style="display: block; margin: auto;" /></p>
 <p>From the above plot and the Schoenfeld individual test p-value, we
 can see that the residual plot has a non-zero slope regression line, and
 the p-value of the tests is less than 0.05, which means the covariate
-cd420 doesn’t meet the PH assumption.</p>
+cd420 and cd40 don’t meet the PH assumption.</p>
 <pre class="r"><code># ggsave(&quot;ph_checking_4.png&quot;, width = 6, height = 4)
 ggcoxzph(cox.zph(aids_fit), var = c(&quot;cd820&quot;), df = 2, nsmo = 1000)</code></pre>
-<p><img src="Survival-analysis_files/figure-html/unnamed-chunk-5-1.png" width="1200" style="display: block; margin: auto;" /></p>
+<p><img src="survival-analysis_files/figure-html/unnamed-chunk-16-1.png" width="1200" style="display: block; margin: auto;" /></p>
 <p>However, the covariate cd820 is different.</p>
-<p>Zero slop in the plot indicates : 1. PH model is valid 2. No
-time-varying <span class="math inline">\(\beta_ j\)</span></p>
+<p>Zero slop in the plot indicates :</p>
+<ol style="list-style-type: decimal">
+<li><p>PH model is valid</p></li>
+<li><p>No time-varying <span class="math inline">\(\beta_
+j\)</span></p></li>
+</ol>
 </div>
 </div>
 </div>
-<div id="parametric-analysis" class="section level1">
-<h1>Parametric Analysis</h1>
-<div id="fit-exponential-and-weilbull-distributions"
-class="section level3">
-<h3>Fit exponential and Weilbull distributions</h3>
-<pre class="r"><code>library(flexsurv)
-#parametric survival function
-fit_exp_others = flexsurvreg(Surv(time, cid == 1) ~ 1, 
-                        data = subset(data_fit, treat == 1), dist = &quot;exp&quot;)
-fit_exp_ZDV = flexsurvreg(Surv(time, cid == 1) ~ 1, 
-                        data = subset(data_fit, treat == 0), dist = &quot;exp&quot;)
-fit_weib_others = flexsurvreg(Surv(time, cid == 1) ~ 1, 
-                        data = subset(data_fit, treat == 1), dist = &quot;weibull&quot;)
-fit_weib_ZDV = flexsurvreg(Surv(time, cid == 1) ~ 1, 
-                        data = subset(data_fit, treat == 0), dist = &quot;weibull&quot;)
-
-
-#plot km, exp fitted and weib fitted
-plot(fit_exp_ZDV, conf.int = FALSE, ci = FALSE, col = &quot;red&quot;, col.obs = &quot;pink&quot;, 
-     lty = &quot;longdash&quot;, xlim = c(0,1300), 
-     xlab = &quot;Days&quot;, ylab = &quot;Survival Probability&quot;,
-     main = &quot;KM and Parametric Est&quot;)
-par(new = TRUE)
-plot(fit_exp_others, conf.int = FALSE, ci = FALSE, col = &quot;blue&quot;, col.obs = &quot;skyblue&quot;, lty = &quot;longdash&quot;, xlim = c(0,1000), xaxt = &quot;n&quot;)
-plot(fit_weib_ZDV, add = TRUE, ci = FALSE, col = &quot;brown4&quot;)
-plot(fit_weib_others, add = TRUE, ci = FALSE, col = &quot;blue4&quot;)
-legend(&quot;bottomleft&quot;, legend = c(&quot;Obs ZDV&quot;, &quot;Obs others&quot;, &quot;Exp ZDV&quot;, &quot;Exp others&quot;, &quot;Weib ZDV&quot;, &quot;Weib others&quot;), 
-       col = c(&quot;pink&quot;, &quot;skyblue&quot;, &quot;red&quot;, &quot;blue&quot;, &quot;brown4&quot;, &quot;blue4&quot;),
-       lty = c(&quot;solid&quot;, &quot;solid&quot;, &quot;longdash&quot;, &quot;longdash&quot;, &quot;solid&quot;, &quot;solid&quot;),
-       lwd = c(2,2,2,2,2,2))</code></pre>
-<p><img src="Survival-analysis_files/figure-html/unnamed-chunk-6-1.png" width="1200" style="display: block; margin: auto;" /></p>
-<p>From the plot we can see that the observations in different treatment
-groups match different distributions. More specifically, the survival
-function in the ZDV treatment group may be more likely to follow a
-exponential distribution. Inversely, the other one follows a Weibull
-distribution.</p>
+<div id="results" class="section level1">
+<h1>Results</h1>
+<p>Life tables revealed diverse survival patterns, with ZDV-only
+Treatment exhibiting the earliest median survival time. Kaplan-Meier
+survival curved depicted survival probabilities for distinct treatment
+groups. Log-rank tests and trend log-rank tests assessed differences in
+survival experiences across groups. The Cox Proportional Hazard (PH)
+model was employed to predict survival times considering multiple
+covariates.</p>
 </div>
-<div id="parametric-regression-models" class="section level2">
-<h2>Parametric Regression Models</h2>
-<div id="parametric-ph-models" class="section level3">
-<h3>Parametric PH Models</h3>
-<pre class="r"><code>library(eha)
-#backward selection, significance level = 0.05
-fit_ph1 = eha::phreg(Surv(time, cid==1) ~ .,
-                data = data_fit, dist = &quot;weibull&quot;)
-summary(fit_ph1)|&gt;
-  kable(&quot;latex&quot;, 
-        digits = 4, 
-        escape = F, 
-        booktabs = T, 
-caption = &quot;Weibull (Parametric) PH Model Fitting&quot;) |&gt;
-  kable_styling(position = &quot;center&quot;, 
-                latex_options = &quot;hold_position&quot;)
-# it can be our final model
-
-
-#compare the estimated baseline hazards with a non-parametric ph model
-fit_cox =eha::coxreg(Surv(time, cid==1) ~ ., data = data_fit)
-eha::check.dist(fit_ph1, fit_cox)</code></pre>
-<p><img src="Weibull_Result.png" /></p>
-<p>The fit of the Weibull baseline function is very close to the
-non-parametric one.</p>
-<p>For a Weibull distribution, the AFT model is also a PH model.</p>
-</div>
-</div>
+<div id="conclusion" class="section level1">
+<h1>Conclusion</h1>
+<p>This comprehensive analysis of the ACTG Study 175 dataset indicated
+AIDS patient survival dynamics and treatment efficacy. Further
+investigations into mechanistic insights and validation in broader
+contexts are essential for advancing HIV/AIDS treatment strategies.</p>
 </div>
 
 

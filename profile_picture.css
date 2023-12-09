@@ -1,0 +1,11 @@
+.profile {
+    text-align: center;
+    margin-bottom: 20px;
+}
+
+.profile-pic {
+    width: 300px; /* Adjust the width of the images */
+    height: 300px; /* Adjust the height of the images */
+    border-radius: 50%; /* Make the images rounded */
+    object-fit: cover; /* Maintain aspect ratio */
+}

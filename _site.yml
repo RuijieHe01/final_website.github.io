@@ -11,19 +11,17 @@ navbar:
       href: Data.html
     - text: "Survival Analysis"
       href: Survival-analysis.html
-    - text: "Modeling"
-      href: Modeling.html
-    - text: "Conclusion"
-      href: Conclusion.html
+    - text: "Methods"
+      href: method.html
     - text: "Shiny App"
       href: https://mingzhicumc.shinyapps.io/shiny_dashboard_template/
     - text: "Report"
-      href: Project-report.html
+      href: Report.html
     - icon: fa-youtube fa-lg
       href: mailto:rh3195@cumc.columbia.edu?subject=About%20your%20website
     - icon: fa-github fa-lg
       href: https://github.com/RuijieHe01/final_website.github.io/
 output:
   html_document:
-    theme: cosmo
+    theme: journal
   

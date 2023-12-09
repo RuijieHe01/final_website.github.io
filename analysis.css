@@ -1,0 +1,18 @@
+<style>
+ #sidebar h2{ 
+ background-color:#800020; 
+ }
+ #sidebar{
+ background-color:#800020; 
+ }
+ #sidebar a:hover {
+    background-color: #800020;
+    cursor: pointer;
+  }
+  p{
+    font-size: 18px;
+    line-height: 1.5em;
+    font-family: "Times New Roman", Times, serif;
+  }
+}
+</style>
