@@ -401,8 +401,37 @@ dataset’s implications. This research, therefore, stands poised to
 contribute substantively to the ongoing pursuit of effective
 interventions in the realm of AIDS treatment.</p>
 </div>
-<div id="data-description" class="section level1">
-<h1>Data Description</h1>
+<div id="data-selection" class="section level1">
+<h1>Data Selection</h1>
+<p>To get a idea of some of the factors that affect treatment of AIDs,
+we looked at a dataset published in 1996 by the AIDs Clinical Trials
+Group. The study where these data were collected compared 4 different
+AIDs treatments, but additionally this dataset contains information on
+21 other predictors of death due to AIDS for the 2,139 study
+participants. The primary column of interest is <code>cid</code>
+(censoring indicator), which indicates whether or not the person died
+within the period of observation. A detailed description of the dataset
+can be found in the <a
+href="https://archive.ics.uci.edu/dataset/890/aids+clinical+trials+group+study+175">UC
+Irvine Machine Learning Repository</a>.</p>
+<div id="factors-that-affect-death-due-to-aids" class="section level3">
+<h3>Factors that Affect Death Due to AIDs</h3>
+<p>Having a look at some of the categorical variables in the dataset,
+most do seem to be related to death due to AIDs, which we can see by the
+differing proportions of death between groups. The exceptions are
+hemophilia and perhaps race, which have little or no difference between
+groups. As we might expect, patients who had previously received some
+type of treatment (Non-ZDV antiretroviral therapy pre-175, ZDV in the 30
+days prior to 175, Antiretroviral History) had higher death rates than
+those who had not, presumably because patients who had previously
+received treatment and still met the study inclusion criteria were more
+resistant to treatment. Also of note, is that just from this one plot we
+can see that the “ZDV only” treatment performed worse than the other
+three, which intuition is confirmed by the results of <a
+href="https://pubmed.ncbi.nlm.nih.gov/8813038/">the original
+study</a>.</p>
+<p><img src="Report_files/figure-html/unnamed-chunk-3-1.png" width="960" /></p>
+</div>
 <div id="data-summary" class="section level2">
 <h2>Data Summary</h2>
 <p>This part analyzed the baseline characteristics of participants

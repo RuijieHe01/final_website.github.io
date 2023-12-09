@@ -4,6 +4,7 @@ output:
   html_document:
     toc: true
     toc_float: true
+    
     theme: journal
 ---
 
@@ -12,7 +13,62 @@ output:
 
 Acquired Immunodeficiency Syndrome (AIDS) poses a persistent and formidable global health challenge, affecting millions worldwide with the human immunodeficiency virus (HIV). The quest for effective treatment strategies is paramount, not only to ameliorate patients' quality of life but also to prolong their survival . In this context, our investigation is centered on harnessing insights from the AIDS Clinical Trials Group (ACTG) Study 175 dataset  . This dataset, arising from a randomized, double-blind, placebo-controlled trial, meticulously compares various treatment modalities. Specifically, it juxtaposes monotherapy with zidovudine or didanosine against combination therapies involving zidovudine, didanosine, and zalcitabine. The study cohort comprises adults infected with HIV-1, exhibiting CD4 cell counts between 200 and 500 per cubic millimeter. The primary study endpoints, including a substantial decline in CD4 cell count, progression to AIDS, or death, provide a comprehensive basis for our survival analysis. Employing life tables, Kaplan-Meier survival curves, log-rank tests, and the Cox proportional hazards model , our analytical approach aims to unravel the intricate web of factors influencing survival outcomes in AIDS patients. Through meticulous data processing and exploratory data analysis (EDA), we endeavor to not only describe survival trends over time intervals but also to rigorously evaluate the efficacy of distinct treatment regimens. Thus, our commitment extends to integrating advanced statistical techniques, ensuring a nuanced and comprehensive understanding of the dataset's implications. This research, therefore, stands poised to contribute substantively to the ongoing pursuit of effective interventions in the realm of AIDS treatment.
 
-# Data Description
+# Data Selection
+
+```{r include=FALSE}
+library(tidyverse)
+library(knitr)
+library(viridis)
+knitr::opts_chunk$set(echo = FALSE, message = FALSE)
+```
+
+To get a idea of some of the factors that affect treatment of AIDs, we looked at a dataset published in 1996 by the AIDs Clinical Trials Group. The study where these data were collected compared 4 different AIDs treatments, but additionally this dataset contains information on 21 other predictors of death due to AIDS for the 2,139 study participants. The primary column of interest is `cid` (censoring indicator), which indicates whether or not the person died within the period of observation. A detailed description of the dataset can be found in the [UC Irvine Machine Learning Repository](https://archive.ics.uci.edu/dataset/890/aids+clinical+trials+group+study+175).
+
+### Factors that Affect Death Due to AIDs
+
+```{r}
+aids_df <- read_csv("aids.csv") %>%
+  mutate(
+    cid = factor(cid),
+    trt = factor(trt, levels = 0:3, labels = c("ZDV only", "ZDV + ddI", "ZDV + Zal", "ddI only")),
+    hemo = factor(hemo, levels = 0:1, labels = c("No", "Yes")),
+    homo = factor(homo, levels = 0:1, labels = c("No", "Yes")),
+    drugs = factor(drugs, levels = 0:1, labels = c("No", "Yes")),
+    oprior = factor(oprior, levels = 0:1, labels = c("No", "Yes")),
+    z30 = factor(z30, levels = 0:1, labels = c("No", "Yes")),
+    zprior = factor(zprior, levels = 0:1, labels = c("No", "Yes")),
+    race = factor(race, levels = 0:1, labels = c("White", "Non-white")),
+    gender = factor(gender, levels = 0:1, labels = c("Female", "Male")),
+    str2 = factor(str2, levels = 0:1, labels = c("Naive", "Experienced")),
+    strat = factor(strat, levels = 1:3, labels = c("Antiretroviral Naive", "> 1 but <= 52 weeks of prior antiretroviral therapy", "> 52 weeks")),
+    symptom = factor(symptom, levels = 0:1, labels = c("Asymptomatic", "Symptomatic")),
+    treat = factor(treat, levels = 0:1, labels = c("ZDV only", "Others")),
+    offtrt = factor(offtrt, levels = 0:1, labels = c("No", "Yes"))
+  )
+```
+Having a look at some of the categorical variables in the dataset, most do seem to be related to death due to AIDs, which we can see by the differing proportions of death between groups. The exceptions are hemophilia and perhaps race, which have little or no difference between groups. As we might expect, patients who had previously received some type of treatment (Non-ZDV antiretroviral therapy pre-175, ZDV in the 30 days prior to 175, Antiretroviral History) had higher death rates than those who had not, presumably because patients who had previously received treatment and still met the study inclusion criteria were more resistant to treatment. Also of note, is that just from this one plot we can see that the "ZDV only" treatment performed worse than the other three, which intuition is confirmed by the results of [the original study](https://pubmed.ncbi.nlm.nih.gov/8813038/).
+
+```{r fig.width=10, fig.height=10}
+comp_bar <- function(x, xlab) {
+  ggplot(data = aids_df, mapping = aes(x = .data[[x]], fill = cid)) +
+    geom_bar(position = "fill") +
+    scale_fill_viridis_d(labels = c("Censoring", "Failure")) +
+    scale_x_discrete(guide = guide_axis(angle = -45)) +
+    labs(x = xlab, y = "Proportion", fill = "Censoring") +
+    theme_classic()
+}
+vars_to_plot = c("trt", "hemo", "homo", "drugs", "oprior", "z30", 
+                 "race", "gender", "str2", "symptom", "offtrt")
+labels_to_plot <- c("Treatment", "Hemophilia", "Homosexual", 
+                    "History of Drug Use", 
+                    "Non-ZDV antiretroviral therapy pre-175", 
+                    "ZDV in the 30 days prior to 175", "Race",
+                    "Gender", "Antiretroviral History", "Symptoms", 
+                    "Off-trt before 96+/-5 weeks")
+plots <- map2(vars_to_plot, labels_to_plot, comp_bar)
+do.call(gridExtra::grid.arrange, plots)
+```
+
 
 
 ## Data Summary
