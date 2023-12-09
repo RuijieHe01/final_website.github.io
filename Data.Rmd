@@ -7,7 +7,59 @@ output:
     theme: journal
 ---
 
+```{r include=FALSE}
+library(tidyverse)
+library(knitr)
+library(viridis)
+knitr::opts_chunk$set(echo = FALSE, message = FALSE)
+```
+
+
 To get a idea of some of the factors that affect treatment of AIDs, we looked at a dataset published in 1996 by the AIDs Clinical Trials Group. The study where these data were collected compared 4 different AIDs treatments, but additionally this dataset contains information on 21 other predictors of death due to AIDS.
 
-# Factors the Affect Death Due to AIDs
+# Factors that Affect Death Due to AIDs
+
+```{r}
+aids_df <- read_csv("aids.csv") %>%
+  mutate(
+    cid = factor(cid),
+    trt = factor(trt, levels = 0:3, labels = c("ZDV only", "ZDV + ddI", "ZDV + Zal", "ddI only")),
+    hemo = factor(hemo, levels = 0:1, labels = c("No", "Yes")),
+    homo = factor(homo, levels = 0:1, labels = c("No", "Yes")),
+    drugs = factor(drugs, levels = 0:1, labels = c("No", "Yes")),
+    oprior = factor(oprior, levels = 0:1, labels = c("No", "Yes")),
+    z30 = factor(z30, levels = 0:1, labels = c("No", "Yes")),
+    zprior = factor(zprior, levels = 0:1, labels = c("No", "Yes")),
+    race = factor(race, levels = 0:1, labels = c("White", "Non-white")),
+    gender = factor(gender, levels = 0:1, labels = c("Female", "Male")),
+    str2 = factor(str2, levels = 0:1, labels = c("Naive", "Experienced")),
+    strat = factor(strat, levels = 1:3, labels = c("Antiretroviral Naive", "> 1 but <= 52 weeks of prior antiretroviral therapy", "> 52 weeks")),
+    symptom = factor(symptom, levels = 0:1, labels = c("Asymptomatic", "Symptomatic")),
+    treat = factor(treat, levels = 0:1, labels = c("ZDV only", "Others")),
+    offtrt = factor(offtrt, levels = 0:1, labels = c("No", "Yes"))
+  )
+```
+
+Having a look at some of the categorical variables in the dataset, most do seem to be related to death due to AIDs, with the exception of hemophilia and perhaps race.
+
+```{r fig.width=10, fig.height=10}
+comp_bar <- function(x, xlab) {
+  ggplot(data = aids_df, mapping = aes(x = .data[[x]], fill = cid)) +
+    geom_bar(position = "fill") +
+    scale_fill_viridis_d(labels = c("Censoring", "Failure")) +
+    scale_x_discrete(guide = guide_axis(angle = -45)) +
+    labs(x = xlab, y = "Proportion", fill = "Censoring") +
+    theme_classic()
+}
+vars_to_plot = c("trt", "hemo", "homo", "drugs", "oprior", "z30", 
+                 "race", "gender", "str2", "symptom", "offtrt")
+labels_to_plot <- c("Treatment", "Hemophilia", "Homosexual", 
+                    "History of Drug Use", 
+                    "Non-ZDV antiretroviral therapy pre-175", 
+                    "ZDV in the 30 days prior to 175", "Race",
+                    "Gender", "Antiretroviral History", "Symptoms", 
+                    "Off-trt before 96+/-5 weeks")
+plots <- map2(vars_to_plot, labels_to_plot, comp_bar)
+do.call(gridExtra::grid.arrange, plots)
+```
 

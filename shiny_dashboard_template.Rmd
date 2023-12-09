@@ -1,0 +1,127 @@
+---
+title: "KM Survival Function Estimate"
+output: 
+  flexdashboard::flex_dashboard:
+    theme: journal
+    orientation: columns
+    vertical_layout: fill
+runtime: shiny
+---
+
+<style type="text/css">
+
+.chart-title {  /* chart_title  */
+   font-size: 30px;
+   font-family: Comic Sans MS;
+   font-color:black
+
+</style>
+
+```{r setup, include=FALSE}
+library(flexdashboard)
+rm(list = ls())
+library(tidyverse)
+library(dplyr)
+library(knitr)
+library(kableExtra)
+library(survival)
+library(MASS)
+library(shiny)
+library(shinythemes)
+library(plotly)
+aids<-read_csv("aids.csv")
+n <- nrow(aids)
+data<- aids |>
+  janitor::clean_names()|>
+  dplyr::select(time, cid, trt, everything())
+fit1<-coxph(Surv(time, cid) ~ . , data = data)
+stepwise <- stepAIC(fit1, direction = "backward",k = log(n),trace = F) # BIC
+library(ggfortify)
+library(StepReg)
+library(survminer)
+data_fit <- data |>
+  mutate_at(c(3,6,7,8,10,11,12,14,15,16,17,18,19,20), .funs = ~as.factor(.))
+
+
+
+```
+
+```{r}
+clean_plotly_leg <- function(.plotly_x, .extract_str) {
+  # Inpects an x$data list in a plotly object, cleans up legend values where appropriate
+  if ("legendgroup" %in% names(.plotly_x)) {
+    # The list includes a legend group
+    .plotly_x$legendgroup <- stringr::str_extract(.plotly_x$legendgroup, .extract_str)
+    .plotly_x$name <- stringr::str_extract(.plotly_x$name, .extract_str)
+
+  }
+  .plotly_x
+}
+```
+
+Column {.sidebar}
+-----------------------------------------------------------------------
+
+```{r}
+# selectInput widget
+selectInput(
+  "factor", 
+  label = h3("Factor of Survival"),
+  choices = names(data_fit)[c(3, 6, 7,8,10,11,12,14,15,16,17,18,19,20)], selected = "trt")
+
+sliderInput(
+  "time", 
+  label = h3("Survival days"),
+  value = 500,
+  min = 1, max = max(data_fit$time))
+```
+
+Column {data-width=750}
+-----------------------------------------------------------------------
+
+### Kaplan-Meier Survival Estimate
+
+```{r}
+#--- treat ---
+#km plot
+renderPlotly({
+fit_km_treat <- survfit(Surv(time, cid) ~ get(input[["factor"]]), data_fit)
+p=autoplot(fit_km_treat,censor = FALSE,conf.int = TRUE) + theme_bw() +
+  labs(x = "Time (days)", y = "Survival Function"
+       )+geom_vline(xintercept=input[["time"]], linetype='dotted')
+
+p_plotly=plotly::ggplotly(p)
+p_plotly$x$data<-p_plotly$x$data|> 
+  map(clean_plotly_leg, "[^\\(][^,]*")
+p_plotly
+})
+```
+
+
+Column {data-width=250}
+-----------------------------------------------------------------------
+
+### Table
+```{r}
+renderTable({
+fit_km_treat <- survfit(Surv(time, cid) ~ get(input[["factor"]]), data_fit)
+vec=0
+t=input[["time"]]
+s=c()
+for (i in 1:length(fit_km_treat[["strata"]]))
+{
+  vec_strata=fit_km_treat[["time"]][(vec+1):(vec+fit_km_treat[["strata"]][i])]
+  s[i]=vec+sum(t>=vec_strata)
+  print(vec_strata)
+  vec=vec+fit_km_treat[["strata"]][i]
+}
+
+  tibble(strata=c(0:(length(fit_km_treat[["strata"]])-1)),
+  survival=fit_km_treat$surv[s])}
+)
+```
+
+
+
+
+
