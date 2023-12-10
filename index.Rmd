@@ -43,7 +43,7 @@ output:
 
 <img src="./images/joshua.jpg" alt = "Joshua Carpenter" class = "profile-pic">
 
-$$Joshua\ Carpenter\ (jrc2270))$$
+$$Joshua\ Carpenter\ (jrc2270)$$
 
 \ \par
 <img src="./images/ruijiehe.jpg" alt = "Joshua Carpenter" class = "profile-pic">

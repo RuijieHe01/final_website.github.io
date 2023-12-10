@@ -290,7 +290,7 @@ But first, let's use the same covariates as above, plus the corresponding intera
 ### Interaction test
 
 
-```{r, fig.dim = c(10, 12)}
+```{r}
 library(survminer)
 # --- to be updated ---
 
@@ -307,7 +307,7 @@ cox.zph(aids_fit)
 ```
 
 
-```{r, fig.dim = c(10, 12)}
+```{r}
 # interaction
 aids_interaction_fit <- coxph(Surv(time, cid == 1) ~ trt+ preanti+ symptom+ offtrt + cd420+ cd820 + karnof+ age+drugs+cd40+tt(cd40)+ tt(cd420), data_fit, tt = function(x, t, ...) x*t)
 
