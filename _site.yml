@@ -9,10 +9,10 @@ navbar:
       href: Introduction.html
     - text: "Data"
       href: Data.html
-    - text: "Survival Analysis"
-      href: survival-analysis.html
     - text: "Method"
       href: Method.html
+    - text: "Survival Analysis"
+      href: Survival-analysis.html
     - text: "Shiny App"
       href: https://mingzhicumc.shinyapps.io/shiny_dashboard_template/
     - text: "Report"
