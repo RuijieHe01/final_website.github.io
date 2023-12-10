@@ -18,7 +18,7 @@ The exploratory data analysis (EDA) identified the baseline characteristics, cat
 
 
 
-```{r setup, echo = FALSE, cache = FALSE, message = FALSE}
+```{r setup, echo = FALSE, cache = FALSE, message = FALSE, warning=FALSE}
 rm(list = ls())
 library(tidyverse)
 library(dplyr)
@@ -79,7 +79,7 @@ $$\hat{S}(t) = \prod_{t_i\leq t} e^{-\frac{d_i}{n_i}}$$
 
 This estimator accommodates right-censored data, making it valuable in studies with incomplete follow-ups.It is worth noting that the Nelson-Aalen estimator generally provides more conservative estimates of the cumulative hazard function compared to the Kaplan-Meier estimator.\cite{lzq_1}\cite{lzq_2}
 
-```{r}
+```{r,fig.show='hide'}
 km_fit <- survfit(Surv(time, cid) ~ trt, data)
 km_plot = km_fit |> autoplot() +
   labs(x = "Time (Days)", y = "Estimated Survival Probability",
@@ -97,7 +97,7 @@ grid.arrange(km_plot, fh_plot, ncol = 1)
 
 ```
 
-
+![](fig/analysis1.png)
 
 
 ## Create life-table stratified by trt
@@ -115,7 +115,7 @@ kbl(lifetab_0, "simple", digits = 3)
 
 ### Plot the hazard ratio by trt based on life table estimate
 
-```{r}
+```{r,fig.show='hide'}
 # tx group 0
 lifetab_0 %>%
 mutate(time = tstart + (tstop - tstart)/2) %>%
@@ -124,7 +124,7 @@ geom_point() + geom_line() + theme_bw() +
 labs(x = "Time (Days)", y = "Hazard Rate",
 title = "Hazard Function for Treatment Group 0 based on life-table estimate")
 ```
-
+![](fig/analysis2.png)
 
 ## Log rank score test
 
@@ -229,7 +229,7 @@ Our goal is to investigate the difference between two groups of different treatm
 Recall a PH model, $S(t|Z=z) = e^{-\int h_0(t)e^{\beta z}dt} = S_0(t)^{e^{\beta z}}$, by using a log-log transformation, i.e., $log\{-logS(t|Z=z)\}$, we have
 $$log\{-log\hat{S}(t|Z=z)\}-log\{-log\hat{S_0}(t)\} = \beta $$ for indicator variable $Z$. This indicates two parallel lines under proportionality assumption.
 
-```{r}
+```{r,fig.show='hide'}
 library(ggfortify)
 library(StepReg)
 data_fit <- data |>
@@ -243,7 +243,12 @@ fit_km_treat <- survfit(Surv(time, cid) ~ trt, data_fit)
 autoplot(fit_km_treat) + theme_bw() +
   labs(x = "Time (days)", y = "Survival Function",
        title = "Kaplan-Meier Survival Estimate")
+```
+![](fig/analysis3.png)
 
+
+
+```{r,fig.show='hide'}
 # loglog vs. log time
 # png("ph_checking_1.png", width = 500, height = 400)
 plot(fit_km_treat, fun = "cloglog", col = c("black", "red","pink","blue"),
@@ -251,7 +256,10 @@ plot(fit_km_treat, fun = "cloglog", col = c("black", "red","pink","blue"),
      main = "Log of Negative Log of Estimated Survival Functions")
 legend("topleft", legend = c("ZDV only", "ZDV+ddl", "ZDV+Zal", "ddl only"), col = c("black", "red","pink","blue"), 
        lty = 1, cex = 1)
+```
+![](fig/analysis4.png)
 
+```{r,fig.show='hide'}
 # observed vs. fitted
 fit_ph_treat <- coxph(Surv(time, cid) ~ trt, data_fit)
 
@@ -277,6 +285,8 @@ legend("bottomleft", legend = c("Observed ZDV only", "Observed ZDV+ddl",
                "purple", "black", "yellow", "orange"), lty = 1, cex = 0.6, lwd = 2,
        inset=c(0.05, 0), title="trt", xpd = TRUE)
 ```
+![](fig/analysis5.png)
+
 
 **Interpretation:** The above two figures demonstrate the proportional hazards assumption is hold given there is only one indicator variable `trt` in the model.
 
@@ -323,24 +333,34 @@ caption = "Regresion Coefficients Estimates of the Cox Model with Time Interacti
 
 From the regression summary above, we can see that all the selected variable has a significant effect and interaction with time.
 
-```{r}
+```{r, fig.show='hide'}
 sjPlot::plot_models(aids_fit,aids_interaction_fit, show.values=T, grid=T, value.size = 2.5, m.labels = c("Original Cox", "Time-varying Cox"))
 ```
+![](fig/analysis6.png)
 
-
-```{r}
+```{r, fig.show='hide'}
 aids_fit<-coxph(Surv(time, cid) ~ ., data_fit)
 # residual
 ggcoxzph(cox.zph(aids_fit), var = c("cd420"), df = 2, nsmo = 1000)
+```
+![](fig/analysis7.png)
+
+
+```{r, fig.show='hide'}
 ggcoxzph(cox.zph(aids_fit), var = c("cd40"), df = 2, nsmo = 1000)
 ```
 
+![](fig/analysis8.png)
+
+
 From the above plot and the Schoenfeld individual test p-value, we can see that the residual plot has a non-zero slope regression line, and the p-value of the tests is less than 0.05, which means the covariate cd420 and cd40 don't meet the PH assumption.
 
-```{r}
+```{r, fig.show='hide'}
 # ggsave("ph_checking_4.png", width = 6, height = 4)
 ggcoxzph(cox.zph(aids_fit), var = c("cd820"), df = 2, nsmo = 1000)
 ```
+![](fig/analysis9.png)
+
 
 However, the covariate cd820 is different. 
 

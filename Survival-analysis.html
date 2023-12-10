@@ -339,7 +339,7 @@ div.tocify {
   <a href="Data.html">Data</a>
 </li>
 <li>
-  <a href="Survival-analysis.html">Survival Analysis</a>
+  <a href="survival-analysis.html">Survival Analysis</a>
 </li>
 <li>
   <a href="Method.html">Method</a>
@@ -351,7 +351,7 @@ div.tocify {
   <a href="Report.html">Report</a>
 </li>
 <li>
-  <a href="mailto:rh3195@cumc.columbia.edu?subject=About%20your%20website">
+  <a href="https://youtu.be/FWX2UNl1VlY">
     <span class="fa fa-youtube fa-lg"></span>
      
   </a>
@@ -459,7 +459,7 @@ labs(x = &quot;Time (Days)&quot;, y = &quot;Estimated Survival Probability&quot;
 title = &quot;(b) Nelson-Aalen Survival Estimate&quot;) + theme_bw()
 
 grid.arrange(km_plot, fh_plot, ncol = 1)</code></pre>
-<p><img src="survival-analysis_files/figure-html/unnamed-chunk-2-1.png" width="1200" style="display: block; margin: auto;" /></p>
+<p><img src="fig/analysis1.png" /></p>
 <div id="create-life-table-stratified-by-trt" class="section level2">
 <h2>Create life-table stratified by trt</h2>
 <p>Life tables can provide interval-based summaries of survival data.
@@ -714,7 +714,7 @@ ggplot(aes(x = time, y = hazard)) +
 geom_point() + geom_line() + theme_bw() +
 labs(x = &quot;Time (Days)&quot;, y = &quot;Hazard Rate&quot;,
 title = &quot;Hazard Function for Treatment Group 0 based on life-table estimate&quot;)</code></pre>
-<p><img src="survival-analysis_files/figure-html/unnamed-chunk-4-1.png" width="1200" style="display: block; margin: auto;" /></p>
+<p><img src="fig/analysis2.png" /></p>
 </div>
 </div>
 <div id="log-rank-score-test" class="section level2">
@@ -1089,7 +1089,7 @@ fit_km_treat &lt;- survfit(Surv(time, cid) ~ trt, data_fit)
 autoplot(fit_km_treat) + theme_bw() +
   labs(x = &quot;Time (days)&quot;, y = &quot;Survival Function&quot;,
        title = &quot;Kaplan-Meier Survival Estimate&quot;)</code></pre>
-<p><img src="survival-analysis_files/figure-html/unnamed-chunk-10-1.png" width="1200" style="display: block; margin: auto;" /></p>
+<p><img src="fig/analysis3.png" /></p>
 <pre class="r"><code># loglog vs. log time
 # png(&quot;ph_checking_1.png&quot;, width = 500, height = 400)
 plot(fit_km_treat, fun = &quot;cloglog&quot;, col = c(&quot;black&quot;, &quot;red&quot;,&quot;pink&quot;,&quot;blue&quot;),
@@ -1097,7 +1097,7 @@ plot(fit_km_treat, fun = &quot;cloglog&quot;, col = c(&quot;black&quot;, &quot;r
      main = &quot;Log of Negative Log of Estimated Survival Functions&quot;)
 legend(&quot;topleft&quot;, legend = c(&quot;ZDV only&quot;, &quot;ZDV+ddl&quot;, &quot;ZDV+Zal&quot;, &quot;ddl only&quot;), col = c(&quot;black&quot;, &quot;red&quot;,&quot;pink&quot;,&quot;blue&quot;), 
        lty = 1, cex = 1)</code></pre>
-<p><img src="survival-analysis_files/figure-html/unnamed-chunk-10-2.png" width="1200" style="display: block; margin: auto;" /></p>
+<p><img src="fig/analysis4.png" /></p>
 <pre class="r"><code># observed vs. fitted
 fit_ph_treat &lt;- coxph(Surv(time, cid) ~ trt, data_fit)
 
@@ -1122,7 +1122,7 @@ legend(&quot;bottomleft&quot;, legend = c(&quot;Observed ZDV only&quot;, &quot;O
        col = c(&quot;blue&quot;, &quot;darkgreen&quot;, &quot;red&quot;,&quot;pink&quot;,
                &quot;purple&quot;, &quot;black&quot;, &quot;yellow&quot;, &quot;orange&quot;), lty = 1, cex = 0.6, lwd = 2,
        inset=c(0.05, 0), title=&quot;trt&quot;, xpd = TRUE)</code></pre>
-<p><img src="survival-analysis_files/figure-html/unnamed-chunk-10-3.png" width="1200" style="display: block; margin: auto;" /></p>
+<p><img src="fig/analysis5.png" /></p>
 <p><strong>Interpretation:</strong> The above two figures demonstrate
 the proportional hazards assumption is hold given there is only one
 indicator variable <code>trt</code> in the model.</p>
@@ -1302,20 +1302,20 @@ Interactions</caption>
 <p>From the regression summary above, we can see that all the selected
 variable has a significant effect and interaction with time.</p>
 <pre class="r"><code>sjPlot::plot_models(aids_fit,aids_interaction_fit, show.values=T, grid=T, value.size = 2.5, m.labels = c(&quot;Original Cox&quot;, &quot;Time-varying Cox&quot;))</code></pre>
-<p><img src="survival-analysis_files/figure-html/unnamed-chunk-14-1.png" width="1200" style="display: block; margin: auto;" /></p>
+<p><img src="fig/analysis6.png" /></p>
 <pre class="r"><code>aids_fit&lt;-coxph(Surv(time, cid) ~ ., data_fit)
 # residual
 ggcoxzph(cox.zph(aids_fit), var = c(&quot;cd420&quot;), df = 2, nsmo = 1000)</code></pre>
-<p><img src="survival-analysis_files/figure-html/unnamed-chunk-15-1.png" width="1200" style="display: block; margin: auto;" /></p>
+<p><img src="fig/analysis7.png" /></p>
 <pre class="r"><code>ggcoxzph(cox.zph(aids_fit), var = c(&quot;cd40&quot;), df = 2, nsmo = 1000)</code></pre>
-<p><img src="survival-analysis_files/figure-html/unnamed-chunk-15-2.png" width="1200" style="display: block; margin: auto;" /></p>
+<p><img src="fig/analysis8.png" /></p>
 <p>From the above plot and the Schoenfeld individual test p-value, we
 can see that the residual plot has a non-zero slope regression line, and
 the p-value of the tests is less than 0.05, which means the covariate
 cd420 and cd40 don’t meet the PH assumption.</p>
 <pre class="r"><code># ggsave(&quot;ph_checking_4.png&quot;, width = 6, height = 4)
 ggcoxzph(cox.zph(aids_fit), var = c(&quot;cd820&quot;), df = 2, nsmo = 1000)</code></pre>
-<p><img src="survival-analysis_files/figure-html/unnamed-chunk-16-1.png" width="1200" style="display: block; margin: auto;" /></p>
+<p><img src="fig/analysis9.png" /></p>
 <p>However, the covariate cd820 is different.</p>
 <p>Zero slop in the plot indicates :</p>
 <ol style="list-style-type: decimal">
