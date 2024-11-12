@@ -48,10 +48,9 @@ output:
 
 \ \par
 <center>
+<img src="./images/zhuodiaokuang.jpg" alt = "Joshua Carpenter" class = "profile-pic">
 
-<img src="./images/joshua.jpg" alt = "Joshua Carpenter" class = "profile-pic">
-
-$$Joshua\ Carpenter\ (jrc2270)$$
+$$Zhuodiao\ Kuang\ (zk2275)$$
 
 \ \par
 <img src="./images/ruijiehe.jpg" alt = "Joshua Carpenter" class = "profile-pic">
@@ -64,9 +63,9 @@ $$Ruijie\ He\ (rh3195)$$
 $$Ruoying\ Deng\ (rd3097)$$
 
 \ \par
-<img src="./images/zhuodiaokuang.jpg" alt = "Joshua Carpenter" class = "profile-pic">
+<img src="./images/joshua.jpg" alt = "Joshua Carpenter" class = "profile-pic">
 
-$$Zhuodiao\ Kuang\ (zk2275)$$
+$$Joshua\ Carpenter\ (jrc2270)$$
 
 \ \par
 <img src="./images/mingzhichen.jpg" alt = "Joshua Carpenter" class = "profile-pic">
